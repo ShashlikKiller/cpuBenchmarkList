@@ -1,6 +1,7 @@
 ﻿using AngleSharp;
 using cpuListApp.Model.Entities;
 using System;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using static cpuListApp.Model.Backend.Patterns.CPUBuilder;
@@ -21,7 +22,60 @@ namespace cpuListApp.Model.Backend.Parser
                 else return 0;
             }
             return 0;
-            throw new ArgumentException("Invalid input format");
+            throw new ArgumentException("Invalid frequency input format");
+        }
+
+        private static float ExtractTDP(string tdp)
+        {
+            string[] parts = tdp.Split(' ');
+            if (parts.Length == 2 && parts[1].Equals("W", StringComparison.OrdinalIgnoreCase))
+            {
+                if (float.TryParse(parts[0], out float result))
+                {
+                    return result;
+                }
+                else return 0;
+            }
+            return 0;
+            throw new ArgumentException("Invalid TDP input format");
+        }
+
+        private static uint ExtractTechproccess(string techproccess)
+        {
+            string[] parts = techproccess.Split(' ');
+            if (parts.Length == 2 && parts[1].Equals("nm", StringComparison.OrdinalIgnoreCase))
+            {
+                if (uint.TryParse(parts[0], out uint result))
+                {
+                    return result;
+                }
+                else return 0;
+            }
+            return 0;
+            throw new ArgumentException("Invalid techprocess input format");
+        }
+        private static float TryGetTemperature(string temp)
+        {
+            float result = 0;
+            string[] parts = temp.Split('°');
+            if (parts.Length == 2 && parts[1].Trim() == "C")
+            {
+                float.TryParse(parts[0], out result);
+            }
+            return result;
+        }
+
+        public static string GetBrand(string name)
+        {
+            switch (name)
+            {
+                case string n when n.Contains("AMD"):
+                    return "AMD";
+                case string n when n.Contains("Intel"):
+                    return "Intel";
+                default:
+                    return "N/A";
+            }
         }
 
         public static async Task Parse()
@@ -117,15 +171,15 @@ namespace cpuListApp.Model.Backend.Parser
                                     builder.AddArch(arch, currCPU);
                                     break;
                                 case "Техпроцесс":
-                                    if (!UInt32.TryParse(item.Children[1].InnerHtml, out techproccess)) techproccess = 0;
+                                    techproccess = ExtractTechproccess(item.Children[1].InnerHtml);
                                     builder.AddTechproccess(techproccess, currCPU);
                                     break;
                                 case "TDP":
-                                    if (!float.TryParse(item.Children[1].InnerHtml, out tdp)) tdp = 0;
+                                    tdp = ExtractTDP(item.Children[1].InnerHtml);
                                     builder.AddTDP(tdp, currCPU);
                                     break;
                                 case "Макс. температура":
-                                    if (!float.TryParse(item.Children[1].InnerHtml, out tempLimit)) tempLimit = 0;
+                                    tempLimit = TryGetTemperature(item.Children[1].InnerHtml);
                                     builder.AddTempLimit(tempLimit, currCPU);
                                     break;
                                 case "Кэш L1, КБ":
@@ -164,6 +218,8 @@ namespace cpuListApp.Model.Backend.Parser
                     builder.AddRank(rank, currCPU);
                     name = columns[1].TextContent;
                     builder.AddName(name, currCPU);
+                    brand = GetBrand(name);
+                    builder.AddBrand(brand, currCPU);
                     if (!float.TryParse(columns[3].TextContent, out points)) points = 0;
                     builder.AddBenchPoints(points, currCPU);
                 }

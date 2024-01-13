@@ -19,7 +19,6 @@ namespace cpuListApp.Model.Backend.Parser
                 {
                     return result;
                 }
-                else return 0;
             }
             return 0;
             throw new ArgumentException("Invalid frequency input format");
@@ -34,7 +33,6 @@ namespace cpuListApp.Model.Backend.Parser
                 {
                     return result;
                 }
-                else return 0;
             }
             return 0;
             throw new ArgumentException("Invalid TDP input format");
@@ -49,7 +47,6 @@ namespace cpuListApp.Model.Backend.Parser
                 {
                     return result;
                 }
-                else return 0;
             }
             return 0;
             throw new ArgumentException("Invalid techprocess input format");

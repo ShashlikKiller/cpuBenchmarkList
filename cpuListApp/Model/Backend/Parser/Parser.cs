@@ -76,7 +76,7 @@ namespace cpuListApp.Model.Backend.Parser
             }
         }
 
-        public static async Task<List<CPU>> Parse()
+        public static async Task<List<CPU>> Parse(int listLength)
         {
             // HTML zone
             string url = "https://www.chaynikam.info/en/cpu_table.html";
@@ -105,7 +105,7 @@ namespace cpuListApp.Model.Backend.Parser
             float points;
             // Builder zone
             List<CPU> cpuList = new List<CPU>();
-            foreach (var row in processorRows)
+            foreach (var row in processorRows.Take(listLength))
             {
                 CPU currCPU = new CPU();
                 var link = row.QuerySelector("a");
@@ -131,12 +131,12 @@ namespace cpuListApp.Model.Backend.Parser
                                     builder.AddSegment(segment, currCPU);
                                     break;
                                 case "Socket":
-                                    socket = item.Children[1].InnerHtml;
+                                    socket = item.Children[1].TextContent;
                                     builder.AddSocket(socket, currCPU);
                                     break;
                                 case "Количество ядер":
                                     if (!UInt32.TryParse(item.Children[1].InnerHtml, out cores)) cores = 0;
-                                    builder.AddCores(cores,currCPU);
+                                    builder.AddCores(cores, currCPU);
                                     break;
                                 case "Количество потоков":
                                     if (!UInt32.TryParse(item.Children[1].InnerHtml, out threads)) threads = 0;
@@ -155,7 +155,7 @@ namespace cpuListApp.Model.Backend.Parser
                                     {
                                         case "да":
                                             multiplier = true;
-                                        break;
+                                            break;
                                         case "нет":
                                             multiplier = false;
                                             break;
@@ -219,9 +219,10 @@ namespace cpuListApp.Model.Backend.Parser
                     builder.AddName(name, currCPU);
                     brand = GetBrand(name);
                     builder.AddBrand(brand, currCPU);
-                    if (!float.TryParse(columns[3].TextContent, out points)) points = 0;
+                    if (!float.TryParse(columns[3].TextContent.Replace('.', ','), out points)) points = 0;
                     builder.AddBenchPoints(points, currCPU);
                     cpuList.Add(currCPU);
+
                 }
             }
             return cpuList;

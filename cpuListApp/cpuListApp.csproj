@@ -85,6 +85,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="View\Frames\CPUListFrame.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\Frames\EmptyListFrame.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -101,10 +105,14 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Model\Backend\Command.cs" />
     <Compile Include="Model\Entities\CPUVM.cs" />
     <Compile Include="Model\Entities\dbContext.cs" />
     <Compile Include="ViewModel\appWindowVM.cs" />
     <Compile Include="ViewModel\basicVM.cs" />
+    <Compile Include="View\Frames\CPUListFrame.xaml.cs">
+      <DependentUpon>CPUListFrame.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Frames\EmptyListFrame.xaml.cs">
       <DependentUpon>EmptyListFrame.xaml</DependentUpon>
     </Compile>
@@ -148,6 +156,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Reports\" />
+    <Folder Include="View\Images\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

@@ -2,9 +2,10 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:local="clr-namespace:cpuListApp.View.Frames" xmlns:viewmodel="clr-namespace:cpuListApp.ViewModel" d:DataContext="{d:DesignInstance Type=viewmodel:appWindowVM}"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800"
+        Background="Gray">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="12*"/>
@@ -29,11 +30,37 @@
             </DockPanel>
         </StackPanel>
         <Frame Name="MainTable">
-            
+            <Frame.Style>
+                <Style TargetType="{x:Type Frame}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding CurrentCPUlist.Count}" Value="0">
+                            <Setter Property="Content">
+                                <Setter.Value>
+                                    <local:EmptyListFrame/>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding ProgressBarVisibility}" Value="True">
+                            <Setter Property="Content">
+                                <Setter.Value>
+                                    <local:LoadingFrame />
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding GridVisibility}" Value="True">
+                            <Setter Property="Content">
+                                <Setter.Value>
+                                    <local:CPUListFrame/>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Frame.Style>
         </Frame>
-            <DataGrid Grid.Row="0" x:Name="dataGrid" CanUserAddRows="True"
-                  ItemsSource="{Binding CurrentCPUlist}" SelectedIndex="{Binding DataGridIndex}" SelectedItem="{Binding DataGridItem}"
-                  AutoGenerateColumns="True" HorizontalAlignment="Center" VerticalAlignment="Center" IsReadOnly="True"/>
+        <DataGrid Grid.Row="0" Visibility="{Binding GridVisibility}"  x:Name="dataGrid" CanUserAddRows="True"
+                                      ItemsSource="{Binding CurrentCPUlist}" SelectedIndex="{Binding DataGridIndex}" SelectedItem="{Binding DataGridItem}"
+                                      AutoGenerateColumns="True" HorizontalAlignment="Center" VerticalAlignment="Center" IsReadOnly="True"/>
         <Button Content="Сгенерировать отчёт" Height="50" Width="180" Grid.Column="1" Grid.Row="0" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,10,0,0" Command="{Binding GenerateReport}"/>
         <Button Content="info" Height="50" Width="50" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0" Command="{Binding InfoWindow}"/>
     </Grid>

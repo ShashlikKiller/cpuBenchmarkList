@@ -1,0 +1,14 @@
+﻿<Window x:Class="cpuListApp.View.Frames.CPUListFrame"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:cpuListApp.View.Frames" xmlns:viewmodel="clr-namespace:cpuListApp.ViewModel" d:DataContext="{d:DesignInstance Type=viewmodel:appWindowVM}"
+        mc:Ignorable="d"
+        Title="CPUListFrame" Height="450" Width="800">
+    <Grid>
+        <DataGrid x:Name="dataGrid" CanUserAddRows="True"
+                                      ItemsSource="{Binding CurrentCPUlist}" Width="100" Height="500" SelectedIndex="{Binding DataGridIndex}" SelectedItem="{Binding DataGridItem}"
+                                      AutoGenerateColumns="True" HorizontalAlignment="Center" VerticalAlignment="Center" IsReadOnly="True"/>
+    </Grid>
+</Window>

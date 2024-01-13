@@ -213,7 +213,7 @@ namespace cpuListApp.Model.Backend.Parser
                         }
                     }
                     var columns = row.QuerySelectorAll("td");
-                    if (!UInt32.TryParse(columns[0].TextContent, out rank)) rank = 0;
+                    if (!UInt32.TryParse(columns[0].TextContent, out rank)) rank = cpuList.Last().Rank;
                     builder.AddRank(rank, currCPU);
                     name = columns[1].TextContent;
                     builder.AddName(name, currCPU);

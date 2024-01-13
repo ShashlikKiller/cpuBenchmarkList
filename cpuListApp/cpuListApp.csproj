@@ -119,6 +119,7 @@
     <Compile Include="View\Frames\LoadingFrame.xaml.cs">
       <DependentUpon>LoadingFrame.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Images\BrandImageConverter.cs" />
     <Compile Include="View\Windows\AppWindow.xaml.cs">
       <DependentUpon>AppWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -156,7 +157,15 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Reports\" />
-    <Folder Include="View\Images\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\Sources\unknown.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\Sources\intel.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\Sources\amd.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

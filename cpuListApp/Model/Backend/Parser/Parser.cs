@@ -1,6 +1,7 @@
 ﻿using AngleSharp;
 using cpuListApp.Model.Entities;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -75,7 +76,7 @@ namespace cpuListApp.Model.Backend.Parser
             }
         }
 
-        public static async Task Parse()
+        public static async Task<List<CPU>> Parse()
         {
             // HTML zone
             string url = "https://www.chaynikam.info/en/cpu_table.html";
@@ -103,6 +104,7 @@ namespace cpuListApp.Model.Backend.Parser
             uint rank;
             float points;
             // Builder zone
+            List<CPU> cpuList = new List<CPU>();
             foreach (var row in processorRows)
             {
                 CPU currCPU = new CPU();
@@ -219,8 +221,10 @@ namespace cpuListApp.Model.Backend.Parser
                     builder.AddBrand(brand, currCPU);
                     if (!float.TryParse(columns[3].TextContent, out points)) points = 0;
                     builder.AddBenchPoints(points, currCPU);
+                    cpuList.Add(currCPU);
                 }
             }
+            return cpuList;
         }
     }
 }

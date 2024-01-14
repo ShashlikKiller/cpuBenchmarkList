@@ -21,10 +21,10 @@
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
             <DockPanel Width="Auto" Height="50">
-                <Button Grid.Column="0" Content="Начать парсинг" Command="{Binding StartParsing}" IsEnabled="{Binding IsEnableParsing}"/>
+                <Button Grid.Column="0" Content="Start parse" Command="{Binding StartParsing}" IsEnabled="{Binding IsEnableParsing}"/>
             </DockPanel>
             <DockPanel Width="Auto" Height="50">
-                <Button Grid.Column="0" Content="Отправить данные в БД" Command="{Binding GetHeroes}"/>
+                <Button Grid.Column="0" Content="Save data in db" Command="{Binding SaveCPUlist}"/>
             </DockPanel>
             <DockPanel>
                 <Button Grid.Column="0" IsEnabled="{Binding IsEnableHeroDetails}" Content="Изменить процессор" Height="50" Width="180" Command="{Binding HeroDetails}"/>
@@ -96,7 +96,7 @@
                         <TextBlock Grid.Column="1" Text="{Binding Name}" Margin="0,0,5,0"/>
                         <TextBlock Grid.Column="2" Text="{Binding Cores}" Margin="0,0,5,0"/>
                         <TextBlock Grid.Column="3" Text="{Binding Threads}" Margin="0,0,5,0"/>
-                        <TextBlock Grid.Column="4" Text="{Binding Points}"/>
+                        <TextBlock Grid.Column="4" Text="{Binding BenchPoints}"/>
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>

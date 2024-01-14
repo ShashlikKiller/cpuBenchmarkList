@@ -76,6 +76,11 @@ namespace cpuListApp.Model.Backend.Parser
             }
         }
 
+        public static string DeletedTabSpaceStr(string innertext)
+        {
+            var input = innertext.Split(new[] { '\t' }, StringSplitOptions.RemoveEmptyEntries);
+            return input.Last().Trim();
+        }
         public static async Task<List<CPU>> Parse(int listLength)
         {
             // HTML zone
@@ -120,40 +125,42 @@ namespace cpuListApp.Model.Backend.Parser
                     {
                         foreach (var item in additionalInfoRows)
                         {
-                            switch (item.Children[0].InnerHtml)
+                            string rowSwitcher = DeletedTabSpaceStr(item.Children[0].InnerHtml);
+                            switch (rowSwitcher)
                             {
                                 case "Год выхода":
-                                    if (!UInt32.TryParse(item.Children[1].InnerHtml, out releaseDate)) releaseDate = 0;
+                                    if (!UInt32.TryParse(DeletedTabSpaceStr(item.Children[1].InnerHtml), out releaseDate)) releaseDate = 0;
                                     builder.AddReleaseDate(releaseDate, currCPU);
                                     break;
                                 case "Сегмент":
-                                    segment = item.Children[1].InnerHtml;
+                                    segment = DeletedTabSpaceStr(item.Children[1].InnerHtml);
                                     builder.AddSegment(segment, currCPU);
                                     break;
                                 case "Socket":
-                                    socket = item.Children[1].TextContent;
+                                    socket = DeletedTabSpaceStr(item.Children[1].InnerHtml);
                                     builder.AddSocket(socket, currCPU);
                                     break;
                                 case "Количество ядер":
-                                    if (!UInt32.TryParse(item.Children[1].InnerHtml, out cores)) cores = 0;
+                                    if (!UInt32.TryParse(DeletedTabSpaceStr(item.Children[1].InnerHtml), out cores)) cores = 0;
                                     builder.AddCores(cores, currCPU);
                                     break;
                                 case "Количество потоков":
-                                    if (!UInt32.TryParse(item.Children[1].InnerHtml, out threads)) threads = 0;
+                                    if (!UInt32.TryParse(DeletedTabSpaceStr(item.Children[1].InnerHtml), out threads)) threads = 0;
                                     builder.AddThreads(threads, currCPU);
                                     break;
                                 case "Базовая частота":
-                                    freqDef = ExtractMhzValue(item.Children[1].InnerHtml);
+                                    freqDef = ExtractMhzValue(DeletedTabSpaceStr(item.Children[1].InnerHtml));
                                     builder.AddFreqDefault(freqDef, currCPU);
                                     break;
                                 case "Turbo Core":
-                                    freqTurbo = ExtractMhzValue(item.Children[1].InnerHtml);
+                                    freqTurbo = ExtractMhzValue(DeletedTabSpaceStr(item.Children[1].InnerHtml));
                                     builder.AddFreqTurbo(freqTurbo, currCPU);
                                     break;
                                 case "Разблокированный множитель":
-                                    switch (item.Children[1].InnerHtml)
+                                    switch (DeletedTabSpaceStr(item.Children[1].InnerHtml))
                                     {
                                         case "да":
+                                        case "есть":
                                             multiplier = true;
                                             break;
                                         case "нет":
@@ -166,35 +173,36 @@ namespace cpuListApp.Model.Backend.Parser
                                     builder.AddMultiplier(multiplier, currCPU);
                                     break;
                                 case "Архитектура (ядро)":
-                                    arch = item.Children[1].InnerHtml;
+                                    arch = DeletedTabSpaceStr(item.Children[1].InnerHtml);
                                     builder.AddArch(arch, currCPU);
                                     break;
                                 case "Техпроцесс":
-                                    techproccess = ExtractTechproccess(item.Children[1].InnerHtml);
+                                    techproccess = ExtractTechproccess(DeletedTabSpaceStr(item.Children[1].InnerHtml));
                                     builder.AddTechproccess(techproccess, currCPU);
                                     break;
                                 case "TDP":
-                                    tdp = ExtractTDP(item.Children[1].InnerHtml);
+                                    tdp = ExtractTDP(DeletedTabSpaceStr(item.Children[1].InnerHtml));
                                     builder.AddTDP(tdp, currCPU);
                                     break;
                                 case "Макс. температура":
-                                    tempLimit = TryGetTemperature(item.Children[1].InnerHtml);
+                                    tempLimit = TryGetTemperature(DeletedTabSpaceStr(item.Children[1].InnerHtml));
                                     builder.AddTempLimit(tempLimit, currCPU);
                                     break;
                                 case "Кэш L1, КБ":
-                                    if (!UInt32.TryParse(item.Children[1].InnerHtml, out l1cache)) l1cache = 0;
+                                    if (!UInt32.TryParse(DeletedTabSpaceStr(item.Children[1].InnerHtml), out l1cache)) l1cache = 0;
                                     builder.AddL1Cache(l1cache, currCPU);
                                     break;
                                 case "Кэш L2, КБ":
-                                    if (!UInt32.TryParse(item.Children[1].InnerHtml, out l2cache)) l2cache = 0;
+                                    if (!UInt32.TryParse(DeletedTabSpaceStr(item.Children[1].InnerHtml), out l2cache)) l2cache = 0;
                                     builder.AddL2Cache(l2cache, currCPU);
                                     break;
                                 case "Кэш L3, КБ":
-                                    if (!UInt32.TryParse(item.Children[1].InnerHtml, out l3cache)) l3cache = 0;
+                                    if (!UInt32.TryParse(DeletedTabSpaceStr(item.Children[1].InnerHtml), out l3cache)) l3cache = 0;
                                     builder.AddL3Cache(l3cache, currCPU);
                                     break;
                                 case "Графический процессор":
-                                    switch (item.Children[1].InnerHtml)
+                                case "iGPU":
+                                    switch (DeletedTabSpaceStr(item.Children[1].InnerHtml))
                                     {
                                         case "да":
                                             apu = true;

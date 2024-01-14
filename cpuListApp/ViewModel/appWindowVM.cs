@@ -154,6 +154,17 @@ namespace cpuListApp.ViewModel
                 });
             }
         }
+        private Command saveCPUlist;
+        public Command SaveCPUlist
+        {
+            get
+            {
+                return saveCPUlist = new Command(async obj =>
+                {
+                    trySaveCPUsToDB(currentCPUlist);
+                });
+            }
+        }
 
         private List<CPU> GetCPUsFromDB()
         {

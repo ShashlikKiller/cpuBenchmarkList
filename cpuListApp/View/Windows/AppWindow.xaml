@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:cpuListApp.View.Frames" 
         xmlns:convertor="clr-namespace:cpuListApp.View.Images"
         xmlns:viewmodel="clr-namespace:cpuListApp.ViewModel" 
+        xmlns:pointstowidth="clr-namespace:cpuListApp.View.Converters"
         d:DataContext="{d:DesignInstance Type=viewmodel:appWindowVM}"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800"
@@ -65,18 +66,23 @@
                 </Style>
             </Frame.Style>
         </Frame>
-        <ListBox Grid.Row="0" Visibility="{Binding GridVisibility}" ItemsSource="{Binding CurrentCPUlist}">
+        <ListBox Grid.Row="0" Visibility="{Binding GridVisibility}" HorizontalContentAlignment="Stretch"
+                 ItemsSource="{Binding CurrentCPUlist}">
+            <ListBox.Resources>
+                <pointstowidth:PointsToWidthConverter x:Key="PointsToWidthConverter"/>
+            </ListBox.Resources>
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <Image Width="20" Height="20">
+                        <Image Grid.Column="0" Width="25" Height="25">
                             <Image.Style>
                                 <Style TargetType="Image">
                                     <Style.Triggers>
@@ -93,10 +99,11 @@
                                 </Style>
                             </Image.Style>
                         </Image>
-                        <TextBlock Grid.Column="1" Text="{Binding Name}" Margin="0,0,5,0"/>
-                        <TextBlock Grid.Column="2" Text="{Binding Cores}" Margin="0,0,5,0"/>
-                        <TextBlock Grid.Column="3" Text="{Binding Threads}" Margin="0,0,5,0"/>
-                        <TextBlock Grid.Column="4" Text="{Binding BenchPoints}"/>
+                        <TextBlock Grid.Column="1" Width="200" Text="{Binding Name}" Margin="0,0,5,0"/>
+                        <TextBlock Grid.Column="2" Width="30" Text="{Binding Cores}" Margin="0,0,5,0"/>
+                        <TextBlock Grid.Column="3" Width="30" Text="{Binding Threads}" Margin="0,0,5,0"/>
+                        <TextBlock Grid.Column="4" Width="80" Text="{Binding BenchPoints}"/>
+                        <Rectangle Grid.Column="5" HorizontalAlignment="Left" Fill="Green" Width="{Binding BenchPoints, Converter={StaticResource PointsToWidthConverter}}" Height="20"/>
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>

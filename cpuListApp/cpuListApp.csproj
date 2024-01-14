@@ -141,6 +141,15 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Migrations\202401142041237_InitialCreate.cs" />
+    <Compile Include="Migrations\202401142041237_InitialCreate.designer.cs">
+      <DependentUpon>202401142041237_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202401142135594_addChecker.cs" />
+    <Compile Include="Migrations\202401142135594_addChecker.designer.cs">
+      <DependentUpon>202401142135594_addChecker.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\Backend\Command.cs" />
     <Compile Include="Model\Entities\Brand.cs" />
     <Compile Include="Model\Entities\CPUVM.cs" />
@@ -148,6 +157,7 @@
     <Compile Include="Model\Entities\Socket.cs" />
     <Compile Include="ViewModel\appWindowVM.cs" />
     <Compile Include="ViewModel\basicVM.cs" />
+    <Compile Include="View\Converters\PointsToWidthConverter.cs" />
     <Compile Include="View\Frames\CPUListFrame.xaml.cs">
       <DependentUpon>CPUListFrame.xaml</DependentUpon>
     </Compile>
@@ -157,7 +167,7 @@
     <Compile Include="View\Frames\LoadingFrame.xaml.cs">
       <DependentUpon>LoadingFrame.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Images\BrandImageConverter.cs" />
+    <Compile Include="View\Converters\BrandImageConverter.cs" />
     <Compile Include="View\Windows\AppWindow.xaml.cs">
       <DependentUpon>AppWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -180,6 +190,12 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <EmbeddedResource Include="Migrations\202401142041237_InitialCreate.resx">
+      <DependentUpon>202401142041237_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202401142135594_addChecker.resx">
+      <DependentUpon>202401142135594_addChecker.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

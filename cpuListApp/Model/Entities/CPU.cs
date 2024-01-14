@@ -5,35 +5,36 @@ namespace cpuListApp.Model.Entities
 {
     public class CPU
     {
+        private int releasedate, cores, threads, freqDefault, freqTurbo, techproccess, l1cache, l2cache, l3cache;
         public int Id { get; set; }
-        public uint ReleaseDate { get; set; }
+        public int ReleaseDate { get => releasedate; set => releasedate = value > 0 ? value : 0; }
 
         public string Segment { get; set; }
         //public string Socket { get; set; }
 
-        public uint Cores { get; set; }
+        public int Cores { get => cores; set => cores = value > 0 ? value : 0; }
 
-        public uint Threads { get; set; }
+        public int Threads { get => threads; set => threads = value > 0 ? value : 0; }
 
-        public uint FreqDefault { get; set; }
+        public int FreqDefault { get => freqDefault; set => freqDefault = value > 0 ? value : 0; }
 
-        public uint FreqTurbo { get; set; }
+        public int FreqTurbo { get => freqTurbo; set => freqTurbo = value > 0 ? value : 0; }
 
         public bool? Multiplier { get; set; }
 
         public string Arch { get; set; }
 
-        public uint Techproccess { get; set; }
+        public int Techproccess { get => techproccess; set => techproccess = value > 0 ? value : 0; }
 
         public float TDP { get; set; }
 
         public float TempLimit { get; set; }
 
-        public uint L1cache { get; set; }
+        public int L1cache { get => l1cache; set => l1cache = value > 0 ? value : 0; }
 
-        public uint L2cache { get; set; }
+        public int L2cache { get => l2cache; set => l2cache = value > 0 ? value : 0; }
 
-        public uint L3cache { get; set; }
+        public int L3cache { get => l3cache; set => l3cache = value > 0 ? value : 0; }
 
         public bool? APU { get; set; }
 
@@ -51,8 +52,8 @@ namespace cpuListApp.Model.Entities
         public CPU()
         { }
 
-        public CPU (int id, uint releaseDate, string segment, uint cores, uint threads, uint freqDefault, uint freqTurbo, bool? multiplier,
-            string arch, uint techproccess, float tDP, float tempLimit, uint l1cache, uint l2cache, uint l3cache, bool? aPU, string name,
+        public CPU (int id, int releaseDate, string segment, int cores, int threads, int freqDefault, int freqTurbo, bool? multiplier,
+            string arch, int techproccess, float tDP, float tempLimit, int l1cache, int l2cache, int l3cache, bool? aPU, string name,
             float benchPoints, int rank, int socketId, int brandId)
         {
             Id = id;

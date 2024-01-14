@@ -6,21 +6,21 @@ namespace cpuListApp.Model.Backend.Patterns
     {
         public abstract class CPUBuild
         {
-            public abstract void AddReleaseDate(uint releaseDate, CPU currCPU);
+            public abstract void AddReleaseDate(int releaseDate, CPU currCPU);
             public abstract void AddSegment(string segment, CPU currCPU);
             public abstract void AddSocket(int socketId, CPU currCPU);
-            public abstract void AddCores(uint cores, CPU currCPU);
-            public abstract void AddThreads(uint threads, CPU currCPU);
-            public abstract void AddFreqDefault(uint freqDefault, CPU currCPU);
-            public abstract void AddFreqTurbo(uint freqTurbo, CPU currCPU);
+            public abstract void AddCores(int cores, CPU currCPU);
+            public abstract void AddThreads(int threads, CPU currCPU);
+            public abstract void AddFreqDefault(int freqDefault, CPU currCPU);
+            public abstract void AddFreqTurbo(int freqTurbo, CPU currCPU);
             public abstract void AddMultiplier(bool? multiplier, CPU currCPU);
             public abstract void AddArch(string arch, CPU currCPU);
-            public abstract void AddTechproccess(uint techproccess, CPU currCPU);
+            public abstract void AddTechproccess(int techproccess, CPU currCPU);
             public abstract void AddTDP(float tdp, CPU currCPU);
             public abstract void AddTempLimit(float tempLimit, CPU currCPU);
-            public abstract void AddL1Cache(uint l1cache, CPU currCPU);
-            public abstract void AddL2Cache(uint l2cache, CPU currCPU);
-            public abstract void AddL3Cache(uint l3cache, CPU currCPU);
+            public abstract void AddL1Cache(int l1cache, CPU currCPU);
+            public abstract void AddL2Cache(int l2cache, CPU currCPU);
+            public abstract void AddL3Cache(int l3cache, CPU currCPU);
             public abstract void AddAPU(bool? apu, CPU currCPU);
             public abstract void AddName(string name, CPU currCPU);
             public abstract void AddBrand(int brandId, CPU currCPU);
@@ -36,9 +36,9 @@ namespace cpuListApp.Model.Backend.Patterns
             {
                 this.currentCPUBuilder = builder;
             }
-            public CPU CreateCPU(uint cores, int socketId, uint threads, uint freqDefault, uint freqTurbo, bool? multiplier,
-                                 string arch, uint techproccess, float tdp, float tempLimit, uint l1cache,
-                                 uint l2cache, uint l3cache, bool apu, string name, int brandId, float benchpoints, int rank)
+            public CPU CreateCPU(int cores, int socketId, int threads, int freqDefault, int freqTurbo, bool? multiplier,
+                                 string arch, int techproccess, float tdp, float tempLimit, int l1cache,
+                                 int l2cache, int l3cache, bool apu, string name, int brandId, float benchpoints, int rank)
             {
                 CPU currentCPU = new CPU();
                 currentCPUBuilder.AddCores(cores, currentCPU);
@@ -72,7 +72,7 @@ namespace cpuListApp.Model.Backend.Patterns
             {
                 currCPU.Rank = rank;
             }
-            public override void AddReleaseDate(uint releaseDate, CPU currCPU)
+            public override void AddReleaseDate(int releaseDate, CPU currCPU)
             {
                 currCPU.ReleaseDate = releaseDate;
             }
@@ -82,22 +82,22 @@ namespace cpuListApp.Model.Backend.Patterns
                 currCPU.Segment = segment;
             }
 
-            public override void AddCores(uint cores, CPU currCPU)
+            public override void AddCores(int cores, CPU currCPU)
             {
                 currCPU.Cores = cores;
             }
 
-            public override void AddThreads(uint threads, CPU currCPU)
+            public override void AddThreads(int threads, CPU currCPU)
             {
                 currCPU.Threads = threads;
             }
 
-            public override void AddFreqDefault(uint freqDefault, CPU currCPU)
+            public override void AddFreqDefault(int freqDefault, CPU currCPU)
             {
                 currCPU.FreqDefault = freqDefault;
             }
 
-            public override void AddFreqTurbo(uint freqTurbo, CPU currCPU)
+            public override void AddFreqTurbo(int freqTurbo, CPU currCPU)
             {
                 currCPU.FreqTurbo = freqTurbo;
             }
@@ -112,7 +112,7 @@ namespace cpuListApp.Model.Backend.Patterns
                 currCPU.Arch = arch;
             }
 
-            public override void AddTechproccess(uint techproccess, CPU currCPU)
+            public override void AddTechproccess(int techproccess, CPU currCPU)
             {
                 currCPU.Techproccess = techproccess;
             }
@@ -127,17 +127,17 @@ namespace cpuListApp.Model.Backend.Patterns
                 currCPU.TempLimit = tempLimit;
             }
 
-            public override void AddL1Cache(uint l1cache, CPU currCPU)
+            public override void AddL1Cache(int l1cache, CPU currCPU)
             {
                 currCPU.L1cache = l1cache;
             }
 
-            public override void AddL2Cache(uint l2cache, CPU currCPU)
+            public override void AddL2Cache(int l2cache, CPU currCPU)
             {
                 currCPU.L2cache = l2cache;
             }
 
-            public override void AddL3Cache(uint l3cache, CPU currCPU)
+            public override void AddL3Cache(int l3cache, CPU currCPU)
             {
                 currCPU.L3cache = l3cache;
             }

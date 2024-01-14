@@ -11,12 +11,12 @@ namespace cpuListApp.Model.Backend.Parser
 {
     public class Parser
     {
-        private static uint ExtractMhzValue(string freq)
+        private static int ExtractMhzValue(string freq)
         {
             string[] parts = freq.Split(' ');
             if (parts.Length == 2 && parts[1].Equals("Mhz", StringComparison.OrdinalIgnoreCase))
             {
-                if (uint.TryParse(parts[0], out uint result))
+                if (int.TryParse(parts[0], out int result))
                 {
                     return result;
                 }
@@ -39,12 +39,12 @@ namespace cpuListApp.Model.Backend.Parser
             throw new ArgumentException("Invalid TDP input format");
         }
 
-        private static uint ExtractTechproccess(string techproccess)
+        private static int ExtractTechproccess(string techproccess)
         {
             string[] parts = techproccess.Split(' ');
             if (parts.Length == 2 && parts[1].Equals("nm", StringComparison.OrdinalIgnoreCase))
             {
-                if (uint.TryParse(parts[0], out uint result))
+                if (int.TryParse(parts[0], out int result))
                 {
                     return result;
                 }
@@ -94,16 +94,16 @@ namespace cpuListApp.Model.Backend.Parser
             // Builder zone
             ConcreteBuilder builder = new ConcreteBuilder();
             Director director = new Director(builder);
-            uint releaseDate;
+            int releaseDate;
             string segment;
             string socket;
-            uint cores, threads;
-            uint freqDef, freqTurbo;
+            int cores, threads;
+            int freqDef, freqTurbo;
             bool? multiplier;
             string arch;
-            uint techproccess;
+            int techproccess;
             float tdp, tempLimit;
-            uint l1cache, l2cache, l3cache;
+            int l1cache, l2cache, l3cache;
             bool? apu;
             string name;
             int brandId;
@@ -150,7 +150,7 @@ namespace cpuListApp.Model.Backend.Parser
                             switch (rowSwitcher)
                             {
                                 case "Год выхода":
-                                    if (!UInt32.TryParse(DeletedTabSpaceStr(item.Children[1].InnerHtml), out releaseDate)) releaseDate = 0;
+                                    if (!Int32.TryParse(DeletedTabSpaceStr(item.Children[1].InnerHtml), out releaseDate)) releaseDate = 0;
                                     builder.AddReleaseDate(releaseDate, currCPU);
                                     break;
                                 case "Сегмент":
@@ -174,11 +174,11 @@ namespace cpuListApp.Model.Backend.Parser
                                     }
                                     break;
                                 case "Количество ядер":
-                                    if (!UInt32.TryParse(DeletedTabSpaceStr(item.Children[1].InnerHtml), out cores)) cores = 0;
+                                    if (!Int32.TryParse(DeletedTabSpaceStr(item.Children[1].InnerHtml), out cores)) cores = 0;
                                     builder.AddCores(cores, currCPU);
                                     break;
                                 case "Количество потоков":
-                                    if (!UInt32.TryParse(DeletedTabSpaceStr(item.Children[1].InnerHtml), out threads)) threads = 0;
+                                    if (!Int32.TryParse(DeletedTabSpaceStr(item.Children[1].InnerHtml), out threads)) threads = 0;
                                     builder.AddThreads(threads, currCPU);
                                     break;
                                 case "Базовая частота":
@@ -222,15 +222,15 @@ namespace cpuListApp.Model.Backend.Parser
                                     builder.AddTempLimit(tempLimit, currCPU);
                                     break;
                                 case "Кэш L1, КБ":
-                                    if (!UInt32.TryParse(DeletedTabSpaceStr(item.Children[1].InnerHtml), out l1cache)) l1cache = 0;
+                                    if (!Int32.TryParse(DeletedTabSpaceStr(item.Children[1].InnerHtml), out l1cache)) l1cache = 0;
                                     builder.AddL1Cache(l1cache, currCPU);
                                     break;
                                 case "Кэш L2, КБ":
-                                    if (!UInt32.TryParse(DeletedTabSpaceStr(item.Children[1].InnerHtml), out l2cache)) l2cache = 0;
+                                    if (!Int32.TryParse(DeletedTabSpaceStr(item.Children[1].InnerHtml), out l2cache)) l2cache = 0;
                                     builder.AddL2Cache(l2cache, currCPU);
                                     break;
                                 case "Кэш L3, КБ":
-                                    if (!UInt32.TryParse(DeletedTabSpaceStr(item.Children[1].InnerHtml), out l3cache)) l3cache = 0;
+                                    if (!Int32.TryParse(DeletedTabSpaceStr(item.Children[1].InnerHtml), out l3cache)) l3cache = 0;
                                     builder.AddL3Cache(l3cache, currCPU);
                                     break;
                                 case "Графический процессор":

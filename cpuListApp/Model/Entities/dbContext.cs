@@ -1,4 +1,5 @@
-﻿using System.Data.Entity;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Entity;
 
 namespace cpuListApp.Model.Entities
 {
@@ -13,10 +14,14 @@ namespace cpuListApp.Model.Entities
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<CPU>().ToTable("CPUs");
+            modelBuilder.Entity<CPU>().Property(p => p.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+            modelBuilder.Entity<Socket>().Property(p => p.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+            modelBuilder.Entity<Brand>().Property(p => p.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             //throw new UnintentionalCodeFirstException();
         }
 
-        public virtual DbSet<CPU> CPUs { get; set; }
+        public DbSet<CPU> CPUs { get; set; }
+        public DbSet<Socket> Sockets { get; set; }
+        public DbSet<Brand> Brands { get; set; }
     }
 }

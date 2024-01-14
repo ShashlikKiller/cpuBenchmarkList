@@ -63,16 +63,16 @@ namespace cpuListApp.Model.Backend.Parser
             return result;
         }
 
-        public static string GetBrand(string name)
+        public static int GetBrandId(string name)
         {
             switch (name)
             {
                 case string n when n.Contains("AMD"):
-                    return "AMD";
+                    return 1;
                 case string n when n.Contains("Intel"):
-                    return "Intel";
+                    return 2;
                 default:
-                    return "N/A";
+                    return 3;
             }
         }
 
@@ -105,8 +105,9 @@ namespace cpuListApp.Model.Backend.Parser
             float tdp, tempLimit;
             uint l1cache, l2cache, l3cache;
             bool? apu;
-            string name, brand;
-            uint rank;
+            string name;
+            int brandId;
+            int rank;
             float points;
             // Builder zone
             List<CPU> cpuList = new List<CPU>();
@@ -121,6 +122,26 @@ namespace cpuListApp.Model.Backend.Parser
                     var newDocument = await context.OpenAsync(cpuUrl);
                     // Открываем дополнительное окошко по ссылке
                     var additionalInfoRows = newDocument.QuerySelectorAll("body div.body div div:nth-child(3) div table tbody tr").Where(x => x.ChildElementCount == 2); // Извлекаем информацию из дополнительного окошка
+                    var columns = row.QuerySelectorAll("td");
+                    if (!Int32.TryParse(columns[0].TextContent, out rank)) rank = cpuList.Last().Rank;
+                    builder.AddRank(rank, currCPU);
+                    name = columns[1].TextContent;
+                    builder.AddName(name, currCPU);
+                    brandId = GetBrandId(name);
+                    builder.AddBrand(brandId, currCPU);
+                    using (var db = new cpuListContext())
+                    {
+                        if (db.CPUs.Any(c => c.Name == currCPU.Name))
+                        {
+                            if (db.CPUs.Any(c=>c.Rank == currCPU.Rank))
+                            {
+                                continue;
+                            }
+                        }
+                    }
+                    if (!float.TryParse(columns[3].TextContent.Replace('.', ','), out points)) points = 0;
+                    builder.AddBenchPoints(points, currCPU);
+                    cpuList.Add(currCPU);
                     if (additionalInfoRows != null)
                     {
                         foreach (var item in additionalInfoRows)
@@ -137,8 +158,20 @@ namespace cpuListApp.Model.Backend.Parser
                                     builder.AddSegment(segment, currCPU);
                                     break;
                                 case "Socket":
-                                    socket = DeletedTabSpaceStr(item.Children[1].InnerHtml);
-                                    builder.AddSocket(socket, currCPU);
+                                    using (var db = new cpuListContext())
+                                    {
+                                        socket = DeletedTabSpaceStr(item.Children[1].InnerHtml);
+                                        if (!db.Sockets.Any(c => c.Name == socket))
+                                        {
+                                            Socket newSocket = new Socket()
+                                            {
+                                                Name = socket
+                                            };
+                                            db.Sockets.Add(newSocket);
+                                            await db.SaveChangesAsync();
+                                        }
+                                        builder.AddSocket(db.Sockets.Where(c => c.Name == socket).FirstOrDefault().Id, currCPU);
+                                    }
                                     break;
                                 case "Количество ядер":
                                     if (!UInt32.TryParse(DeletedTabSpaceStr(item.Children[1].InnerHtml), out cores)) cores = 0;
@@ -220,17 +253,6 @@ namespace cpuListApp.Model.Backend.Parser
                             }
                         }
                     }
-                    var columns = row.QuerySelectorAll("td");
-                    if (!UInt32.TryParse(columns[0].TextContent, out rank)) rank = cpuList.Last().Rank;
-                    builder.AddRank(rank, currCPU);
-                    name = columns[1].TextContent;
-                    builder.AddName(name, currCPU);
-                    brand = GetBrand(name);
-                    builder.AddBrand(brand, currCPU);
-                    if (!float.TryParse(columns[3].TextContent.Replace('.', ','), out points)) points = 0;
-                    builder.AddBenchPoints(points, currCPU);
-                    cpuList.Add(currCPU);
-
                 }
             }
             return cpuList;

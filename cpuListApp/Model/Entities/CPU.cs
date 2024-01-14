@@ -1,12 +1,15 @@
 ﻿
+using System.ComponentModel.DataAnnotations;
+
 namespace cpuListApp.Model.Entities
 {
     public class CPU
     {
+        public int Id { get; set; }
         public uint ReleaseDate { get; set; }
 
         public string Segment { get; set; }
-        public string Socket { get; set; }
+        //public string Socket { get; set; }
 
         public uint Cores { get; set; }
 
@@ -36,21 +39,26 @@ namespace cpuListApp.Model.Entities
 
         public string Name { get; set; }
 
-        public string Brand { get; set; }
+        //public string Brand { get; set; }
 
         public float BenchPoints { get; set; }
-        public uint Rank { get; set; }
+        public int Rank { get; set; }
+        public int SocketId { get; set; }
+        public Socket Socket { get; set; }
+        public int BrandId { get; set; }
+        public Brand Brand { get; set; }
 
         public CPU()
         { }
 
-        public CPU (uint releaseDate, string segment, string socket, uint cores, uint threads, uint freqDefault, uint freqTurbo, bool? multiplier,
+        public CPU (int id, uint releaseDate, string segment, uint cores, uint threads, uint freqDefault, uint freqTurbo, bool? multiplier,
             string arch, uint techproccess, float tDP, float tempLimit, uint l1cache, uint l2cache, uint l3cache, bool? aPU, string name,
-            string brand, float benchPoints, uint rank)
+            float benchPoints, int rank, int socketId, int brandId)
         {
+            Id = id;
             ReleaseDate = releaseDate;
             Segment = segment;
-            Socket = socket;
+            SocketId = socketId;
             Cores = cores;
             Threads = threads;
             FreqDefault = freqDefault;
@@ -65,9 +73,9 @@ namespace cpuListApp.Model.Entities
             L3cache = l3cache;
             APU = aPU;
             Name = name;
-            Brand = brand;
             BenchPoints = benchPoints;
             Rank = rank;
+            BrandId = brandId;
         }
     }
 }

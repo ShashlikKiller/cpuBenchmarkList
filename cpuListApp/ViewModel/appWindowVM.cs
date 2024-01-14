@@ -15,15 +15,24 @@ namespace cpuListApp.ViewModel
 
         public appWindowVM()
         {
-            currentCPUlist = new List<CPU>();
+            GridVisibility = "Hidden";
+            LoadCPUlistFromDB();
+            if (CurrentCPUlist.Count > 0) GridVisibility = "Visible";
             DataGridItem = new CPU();
             IsEnableHeroDetails = false;
             IsEnableDeleteHero = false;
             IsEnableParsing = true;
             ProgressBarVisibility = "Hidden";
-            GridVisibility = "Hidden";
             //ShablonPath = @"C:\Users\artem\Desktop\Архитектура ИС\privetVsem.doc";
             //SaveAsPath = @"C:\Users\artem\Desktop\Архитектура ИС\8И11 Принцев АИС Разработка БД и механизмов наполненияdocx.docx";
+        }
+
+        private void LoadCPUlistFromDB()
+        {
+            using (var db = new cpuListContext())
+            {
+                currentCPUlist = db.CPUs.ToList();
+            }
         }
 
         private string progressBarVisibility;
@@ -183,7 +192,7 @@ namespace cpuListApp.ViewModel
                 using (var db = new cpuListContext())
                 {
                     db.CPUs.AddRange(CPUsToSave);
-                    db.SaveChangesAsync();
+                    db.SaveChanges();
                 }
             }
             catch

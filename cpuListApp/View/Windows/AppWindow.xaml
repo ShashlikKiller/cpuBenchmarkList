@@ -80,13 +80,13 @@
                             <Image.Style>
                                 <Style TargetType="Image">
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding Brand}" Value="N/A">
+                                        <DataTrigger Binding="{Binding BrandId}" Value="3">
                                             <Setter Property="Source" Value="../Images/Sources/unknown.png"/>
                                         </DataTrigger>
-                                        <DataTrigger Binding="{Binding Brand}" Value="AMD">
+                                        <DataTrigger Binding="{Binding BrandId}" Value="1">
                                             <Setter Property="Source" Value="../Images/Sources/amd.png" />
                                         </DataTrigger>
-                                        <DataTrigger Binding="{Binding Brand}" Value="Intel">
+                                        <DataTrigger Binding="{Binding BrandId}" Value="2">
                                             <Setter Property="Source" Value="../Images/Sources/intel.png" />
                                         </DataTrigger>
                                     </Style.Triggers>

@@ -8,7 +8,7 @@ namespace cpuListApp.Model.Backend.Patterns
         {
             public abstract void AddReleaseDate(uint releaseDate, CPU currCPU);
             public abstract void AddSegment(string segment, CPU currCPU);
-            public abstract void AddSocket(string socket, CPU currCPU);
+            public abstract void AddSocket(int socketId, CPU currCPU);
             public abstract void AddCores(uint cores, CPU currCPU);
             public abstract void AddThreads(uint threads, CPU currCPU);
             public abstract void AddFreqDefault(uint freqDefault, CPU currCPU);
@@ -23,9 +23,9 @@ namespace cpuListApp.Model.Backend.Patterns
             public abstract void AddL3Cache(uint l3cache, CPU currCPU);
             public abstract void AddAPU(bool? apu, CPU currCPU);
             public abstract void AddName(string name, CPU currCPU);
-            public abstract void AddBrand(string brand, CPU currCPU);
+            public abstract void AddBrand(int brandId, CPU currCPU);
             public abstract void AddBenchPoints(float benchpoints, CPU currCPU);
-            public abstract void AddRank(uint rank, CPU currCPU);
+            public abstract void AddRank(int rank, CPU currCPU);
             public abstract CPU GetCPU(CPU currCPU);
         }
 
@@ -36,13 +36,13 @@ namespace cpuListApp.Model.Backend.Patterns
             {
                 this.currentCPUBuilder = builder;
             }
-            public CPU CreateCPU(uint cores, string socket, uint threads, uint freqDefault, uint freqTurbo, bool? multiplier,
+            public CPU CreateCPU(uint cores, int socketId, uint threads, uint freqDefault, uint freqTurbo, bool? multiplier,
                                  string arch, uint techproccess, float tdp, float tempLimit, uint l1cache,
-                                 uint l2cache, uint l3cache, bool apu, string name, string brand, float benchpoints, uint rank)
+                                 uint l2cache, uint l3cache, bool apu, string name, int brandId, float benchpoints, int rank)
             {
                 CPU currentCPU = new CPU();
                 currentCPUBuilder.AddCores(cores, currentCPU);
-                currentCPUBuilder.AddSocket(socket, currentCPU);
+                currentCPUBuilder.AddSocket(socketId, currentCPU);
                 currentCPUBuilder.AddThreads(threads, currentCPU);
                 currentCPUBuilder.AddFreqDefault(freqDefault, currentCPU);
                 currentCPUBuilder.AddFreqTurbo(freqTurbo, currentCPU);
@@ -56,7 +56,7 @@ namespace cpuListApp.Model.Backend.Patterns
                 currentCPUBuilder.AddL3Cache(l3cache, currentCPU);
                 currentCPUBuilder.AddAPU(apu, currentCPU);
                 currentCPUBuilder.AddName(name, currentCPU);
-                currentCPUBuilder.AddBrand(brand, currentCPU);
+                currentCPUBuilder.AddBrand(brandId, currentCPU);
                 currentCPUBuilder.AddBenchPoints(benchpoints, currentCPU);
                 currentCPUBuilder.AddRank(rank, currentCPU);
                 return currentCPUBuilder.GetCPU(currentCPU);
@@ -64,11 +64,11 @@ namespace cpuListApp.Model.Backend.Patterns
         }
         public class ConcreteBuilder : CPUBuild
         {
-            public override void AddSocket(string socket, CPU currCPU)
+            public override void AddSocket(int socketId, CPU currCPU)
             {
-                currCPU.Socket = socket;
+                currCPU.SocketId = socketId;
             }
-            public override void AddRank(uint rank, CPU currCPU)
+            public override void AddRank(int rank, CPU currCPU)
             {
                 currCPU.Rank = rank;
             }
@@ -152,9 +152,9 @@ namespace cpuListApp.Model.Backend.Patterns
                 currCPU.Name = name;
             }
 
-            public override void AddBrand(string brand, CPU currCPU)
+            public override void AddBrand(int brandId, CPU currCPU)
             {
-                currCPU.Brand = brand;
+                currCPU.BrandId = brandId;
             }
 
             public override void AddBenchPoints(float benchpoints, CPU currCPU)

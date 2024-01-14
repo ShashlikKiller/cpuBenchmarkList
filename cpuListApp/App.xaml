@@ -4,6 +4,6 @@
              xmlns:local="clr-namespace:cpuListApp"
              StartupUri="View/Windows/AppWindow.xaml">
     <Application.Resources>
-         
-    </Application.Resources>
+        <ResourceDictionary Source="View/Styles/Styles.xaml"/>
+        </Application.Resources>
 </Application>

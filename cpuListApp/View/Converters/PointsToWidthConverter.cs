@@ -15,7 +15,7 @@ namespace cpuListApp.View.Converters
             if (value is float points)
             {
                 // Максимальная высота при 100000.00 Points
-                float maxHeight = 50;
+                float maxHeight = 100;
                 // Преобразование Points в высоту
                 return (points / 100000.00f) * maxHeight;
             }

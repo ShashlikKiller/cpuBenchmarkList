@@ -2,6 +2,7 @@
 using cpuListApp.Model.Entities;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -13,7 +14,7 @@ namespace cpuListApp.ViewModel
 {
     public class appWindowVM : basicVM
     {
-        private List<CPU> currentCPUlist;
+        private ObservableCollection<CPU> currentCPUlist;
 
         public appWindowVM()
         {
@@ -33,7 +34,7 @@ namespace cpuListApp.ViewModel
         {
             using (var db = new cpuListContext())
             {
-                currentCPUlist = db.CPUs.ToList();
+                currentCPUlist = new ObservableCollection<CPU>(db.CPUs);
             }
         }
 
@@ -51,7 +52,7 @@ namespace cpuListApp.ViewModel
             }
         }
 
-        public List<CPU> CurrentCPUlist
+        public ObservableCollection<CPU> CurrentCPUlist
         {
             get
             {
@@ -158,10 +159,40 @@ namespace cpuListApp.ViewModel
                     GridVisibility = "Hidden";
                     ProgressBarVisibility = "True";
                     IsEnableParsing = false;
-                    CurrentCPUlist = await Parse(20);
+                    List<CPU> parsedCPUlist = await Parse(25);
+                    using (var db = new cpuListContext())
+                    {
+                        foreach (var cpu in parsedCPUlist)
+                        {
+
+                            if (!(db.CPUs.Any(c => c.Name == cpu.Name)))
+                            {
+                                if (!(db.CPUs.Any(c => c.Rank == cpu.Rank)))
+                                {
+                                    CurrentCPUlist.Add(cpu);
+                                }
+                            }
+                        }
+                    }
                     IsEnableParsing = true;
                     ProgressBarVisibility = "False";
                     GridVisibility = "Visible";
+                });
+            }
+        }
+        private Command deleteData;
+        public Command DeleteData
+        {
+            get
+            {
+                return deleteData = new Command(async obj =>
+                {
+                    using (var db = new cpuListContext())
+                    {
+                        db.CPUs.RemoveRange(db.CPUs);
+                        CurrentCPUlist.Clear();
+                        await db.SaveChangesAsync();
+                    }
                 });
             }
         }
@@ -172,27 +203,25 @@ namespace cpuListApp.ViewModel
             {
                 return saveCPUlist = new Command(async obj =>
                 {
-                    trySaveCPUsToDB(currentCPUlist);
+                    trySaveCPUsToDB(CurrentCPUlist);
                 });
             }
         }
 
-        private List<CPU> GetCPUsFromDB()
-        {
-            List<CPU> cpus = new List<CPU>();
-            using (var db = new cpuListContext())
-            {
-                cpus = db.CPUs.OrderBy(x => x.Rank).ToList();
-            }
-            return cpus;
-        }
-
-        private bool trySaveCPUsToDB(List<CPU> CPUsToSave)
+        private bool trySaveCPUsToDB(ObservableCollection<CPU> CPUsToSave)
         {
             try
             {
                 using (var db = new cpuListContext())
                 {
+                    foreach (var cpu in db.CPUs)
+                    {
+                        if (CPUsToSave.Any(c => c.Rank == cpu.Rank && c.Name == cpu.Name))
+                        {
+                            db.CPUs.RemoveRange(db.CPUs);
+                        }
+                        else return false;
+                    }
                     db.CPUs.AddRange(CPUsToSave);
                     db.SaveChanges();
                 }

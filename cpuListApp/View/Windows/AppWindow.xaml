@@ -13,30 +13,26 @@
         Background="Gray">
     <Window.Resources>
         <convertor:BrandImageConverter x:Key="BrandImageConverter"/>
+        <Style x:Key="ListViewItemBorderStyle" TargetType="ListViewItem">
+            <Setter Property="BorderBrush" Value="Black"/>
+            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+        </Style>
+        <Style x:Key="GridViewRowPresenterBorderStyle" TargetType="GridViewRowPresenter">
+            <!--<Setter Property="BorderBrush" Value="Black"/>
+            <Setter Property="BorderThickness" Value="0,0,0,1"/>-->
+        </Style>
+        <Style x:Key="GridViewColumnHeaderBorderStyle" TargetType="{x:Type GridViewColumnHeader}">
+            <Setter Property="BorderBrush" Value="Black"/>
+            <Setter Property="BorderThickness" Value="1,1,1,1"/>
+        </Style>
     </Window.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="12*"/>
             <RowDefinition Height="2*"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <DockPanel Width="Auto" Height="50">
-                <Button Grid.Column="0" Content="Start parse" Command="{Binding StartParsing}" IsEnabled="{Binding IsEnableParsing}"/>
-            </DockPanel>
-            <DockPanel Width="Auto" Height="50">
-                <Button Grid.Column="0" Content="Save data in db" Command="{Binding SaveCPUlist}"/>
-            </DockPanel>
-            <DockPanel>
-                <Button Grid.Column="0" IsEnabled="{Binding IsEnableHeroDetails}" Content="Изменить процессор" Height="50" Width="180" Command="{Binding HeroDetails}"/>
-            </DockPanel>
-            <DockPanel>
-                <Button Grid.Column="0" IsEnabled="{Binding IsEnableDeleteHero}" Content="Удалить" Height="50" Width="180" Command="{Binding DeleteHero}"/>
-            </DockPanel>
-            <DockPanel>
-                <Button Grid.Column="0" Content="Удалить все данные из БД" Height="50" Width="180" Command="{Binding ClearAllDB}"/>
-            </DockPanel>
-        </StackPanel>
         <Frame Name="MainTable">
             <Frame.Style>
                 <Style TargetType="{x:Type Frame}">
@@ -66,49 +62,84 @@
                 </Style>
             </Frame.Style>
         </Frame>
-        <ListBox Grid.Row="0" Visibility="{Binding GridVisibility}" HorizontalContentAlignment="Stretch"
-                 ItemsSource="{Binding CurrentCPUlist}">
-            <ListBox.Resources>
+
+        <ListView Background="Transparent" Grid.Row="0" Visibility="{Binding GridVisibility}" HorizontalContentAlignment="Stretch"
+          ItemsSource="{Binding CurrentCPUlist}">
+            <ListView.Resources>
                 <pointstowidth:PointsToWidthConverter x:Key="PointsToWidthConverter"/>
-            </ListBox.Resources>
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Image Grid.Column="0" Width="25" Height="25">
-                            <Image.Style>
-                                <Style TargetType="Image">
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding BrandId}" Value="3">
-                                            <Setter Property="Source" Value="../Images/Sources/unknown.png"/>
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding BrandId}" Value="1">
-                                            <Setter Property="Source" Value="../Images/Sources/amd.png" />
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding BrandId}" Value="2">
-                                            <Setter Property="Source" Value="../Images/Sources/intel.png" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Image.Style>
-                        </Image>
-                        <TextBlock Grid.Column="1" Width="200" Text="{Binding Name}" Margin="0,0,5,0"/>
-                        <TextBlock Grid.Column="2" Width="30" Text="{Binding Cores}" Margin="0,0,5,0"/>
-                        <TextBlock Grid.Column="3" Width="30" Text="{Binding Threads}" Margin="0,0,5,0"/>
-                        <TextBlock Grid.Column="4" Width="80" Text="{Binding BenchPoints}"/>
-                        <Rectangle Grid.Column="5" HorizontalAlignment="Left" Fill="Green" Width="{Binding BenchPoints, Converter={StaticResource PointsToWidthConverter}}" Height="20"/>
-                    </Grid>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
-        <Button Content="Сгенерировать отчёт" Height="50" Width="180" Grid.Column="1" Grid.Row="0" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,10,0,0" Command="{Binding GenerateReport}"/>
-        <Button Content="info" Height="50" Width="50" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0" Command="{Binding InfoWindow}"/>
+                <Style TargetType="{x:Type GridViewRowPresenter}" BasedOn="{StaticResource GridViewRowPresenterBorderStyle}"/>
+            </ListView.Resources>
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem" BasedOn="{StaticResource ListViewItemBorderStyle}"/>
+            </ListView.ItemContainerStyle>
+            <ListView.View>
+                <GridView>
+                    <GridView.ColumnHeaderContainerStyle>
+                        <Style TargetType="{x:Type GridViewColumnHeader}">
+                            <Setter Property="Background" Value="LightGray"/>
+                            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                        </Style>
+                    </GridView.ColumnHeaderContainerStyle>
+                    <GridViewColumn Header="Brand">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Image Width="25" Height="25">
+                                    <Image.Style>
+                                        <Style TargetType="Image">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding BrandId}" Value="3">
+                                                    <Setter Property="Source" Value="../Images/Sources/unknown.png"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding BrandId}" Value="1">
+                                                    <Setter Property="Source" Value="../Images/Sources/amd.png" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding BrandId}" Value="2">
+                                                    <Setter Property="Source" Value="../Images/Sources/intel.png" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Image.Style>
+                                </Image>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" Width="220"/>
+                    <GridViewColumn Header="Cores" DisplayMemberBinding="{Binding Cores}" Width="50"/>
+                    <GridViewColumn Header="Threads" DisplayMemberBinding="{Binding Threads}" Width="50"/>
+                    <GridViewColumn Header="BenchPoints" DisplayMemberBinding="{Binding BenchPoints}" Width="100"/>
+                    <GridViewColumn Header="BenchPointsBar" Width="Auto">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Rectangle HorizontalAlignment="Left" Fill="Green" Width="{Binding BenchPoints, Converter={StaticResource PointsToWidthConverter}}" Height="20"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <DockPanel Width="Auto" Height="50">
+                <Button Foreground="AliceBlue" Background="#303030" Style="{StaticResource CustomButton}" BorderBrush="#454545" Grid.Column="0" Content="Start parse" Command="{Binding StartParsing}" IsEnabled="{Binding IsEnableParsing}"/>
+            </DockPanel>
+            <DockPanel Width="Auto" Height="50">
+                <Button Foreground="AliceBlue" Background="#303030" Style="{StaticResource CustomButton}" BorderBrush="#454545" Grid.Column="0" Content="Save data in db" Command="{Binding SaveCPUlist}"/>
+            </DockPanel>
+            <DockPanel>
+                <Button Foreground="AliceBlue" Background="#303030" Style="{StaticResource CustomButton}" BorderBrush="#454545" Grid.Column="0" IsEnabled="{Binding IsEnableHeroDetails}" Content="Изменить процессор" Height="50" Width="180" Command="{Binding HeroDetails}"/>
+            </DockPanel>
+            <DockPanel>
+                <Button Foreground="AliceBlue" Background="#303030" Style="{StaticResource CustomButton}" BorderBrush="#454545" Grid.Column="0" IsEnabled="{Binding IsEnableDeleteHero}" Content="Удалить" Height="50" Width="180" Command="{Binding DeleteHero}"/>
+            </DockPanel>
+            <DockPanel>
+                <Button Foreground="AliceBlue" Background="#303030" Style="{StaticResource CustomButton}" BorderBrush="#454545" Grid.Column="0" Content="Удалить все данные из БД" Height="50" Width="180" Command="{Binding DeleteData}"/>
+            </DockPanel>
+            <DockPanel>
+                <Button Content="Сгенерировать отчёт" Height="50" Width="180" Command="{Binding GenerateReport}"/>
+            </DockPanel>
+            <DockPanel>
+                <Button Content="info" Height="50" Width="50" Command="{Binding InfoWindow}"/>
+            </DockPanel>
+        </StackPanel>
     </Grid>
 </Window>

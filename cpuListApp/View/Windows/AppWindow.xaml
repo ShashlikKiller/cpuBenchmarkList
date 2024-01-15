@@ -9,8 +9,9 @@
         xmlns:pointstowidth="clr-namespace:cpuListApp.View.Converters"
         d:DataContext="{d:DesignInstance Type=viewmodel:appWindowVM}"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800"
-        Background="Gray">
+        Title="MainWindow" Height="450" Width="900"
+        ResizeMode="NoResize"
+        Background="#263238">
     <Window.Resources>
         <convertor:BrandImageConverter x:Key="BrandImageConverter"/>
         <Style x:Key="ListViewItemBorderStyle" TargetType="ListViewItem">
@@ -29,11 +30,15 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="12*"/>
             <RowDefinition Height="2*"/>
+            <RowDefinition Height="12*"/>
         </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="10*"/>
+            <ColumnDefinition Width="3*"/>
+        </Grid.ColumnDefinitions>
 
-        <Frame Name="MainTable">
+        <Frame Name="MainTable" Grid.Row="0" NavigationUIVisibility="Hidden" Grid.RowSpan="2" Grid.Column="0">
             <Frame.Style>
                 <Style TargetType="{x:Type Frame}">
                     <Style.Triggers>
@@ -44,17 +49,10 @@
                                 </Setter.Value>
                             </Setter>
                         </DataTrigger>
-                        <DataTrigger Binding="{Binding ProgressBarVisibility}" Value="True">
+                        <DataTrigger Binding="{Binding LoadingFrameVisibility}" Value="True">
                             <Setter Property="Content">
                                 <Setter.Value>
                                     <local:LoadingFrame />
-                                </Setter.Value>
-                            </Setter>
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding GridVisibility}" Value="True">
-                            <Setter Property="Content">
-                                <Setter.Value>
-                                    <local:CPUListFrame/>
                                 </Setter.Value>
                             </Setter>
                         </DataTrigger>
@@ -63,8 +61,8 @@
             </Frame.Style>
         </Frame>
 
-        <ListView Background="Transparent" Grid.Row="0" Visibility="{Binding GridVisibility}" HorizontalContentAlignment="Stretch"
-          ItemsSource="{Binding CurrentCPUlist}">
+        <ListView Background="Transparent" Grid.Row="0" Grid.RowSpan="2" Grid.Column="0" Visibility="{Binding CPUListVisibility}" Margin="10,10,10,10" HorizontalContentAlignment="Stretch"
+          ItemsSource="{Binding CurrentCPUlist}" SelectedItem="{Binding SelectedCPU}">
             <ListView.Resources>
                 <pointstowidth:PointsToWidthConverter x:Key="PointsToWidthConverter"/>
                 <Style TargetType="{x:Type GridViewRowPresenter}" BasedOn="{StaticResource GridViewRowPresenterBorderStyle}"/>
@@ -74,12 +72,6 @@
             </ListView.ItemContainerStyle>
             <ListView.View>
                 <GridView>
-                    <GridView.ColumnHeaderContainerStyle>
-                        <Style TargetType="{x:Type GridViewColumnHeader}">
-                            <Setter Property="Background" Value="LightGray"/>
-                            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-                        </Style>
-                    </GridView.ColumnHeaderContainerStyle>
                     <GridViewColumn Header="Brand">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
@@ -118,15 +110,15 @@
             </ListView.View>
         </ListView>
 
-        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Vertical" Margin="10,10,10,10">
             <DockPanel Width="Auto" Height="50">
-                <Button Foreground="AliceBlue" Background="#303030" Style="{StaticResource CustomButton}" BorderBrush="#454545" Grid.Column="0" Content="Start parse" Command="{Binding StartParsing}" IsEnabled="{Binding IsEnableParsing}"/>
+                <Button Foreground="#333333" Background="#333333" Style="{StaticResource CustomButton}" BorderBrush="#454545" Grid.Column="0" Content="Start parse" Command="{Binding StartParsing}" IsEnabled="{Binding ParsingState}"/>
             </DockPanel>
             <DockPanel Width="Auto" Height="50">
-                <Button Foreground="AliceBlue" Background="#303030" Style="{StaticResource CustomButton}" BorderBrush="#454545" Grid.Column="0" Content="Save data in db" Command="{Binding SaveCPUlist}"/>
+                <Button Foreground="AliceBlue" Background="#B0BEC5" Style="{StaticResource CustomButton}" BorderBrush="#454545" Grid.Column="0" Content="Save data in db" Command="{Binding SaveCPUlist}"/>
             </DockPanel>
             <DockPanel>
-                <Button Foreground="AliceBlue" Background="#303030" Style="{StaticResource CustomButton}" BorderBrush="#454545" Grid.Column="0" IsEnabled="{Binding IsEnableHeroDetails}" Content="Изменить процессор" Height="50" Width="180" Command="{Binding HeroDetails}"/>
+                <Button Foreground="AliceBlue" Background="#303030" Style="{StaticResource CustomButton}" BorderBrush="#454545" Grid.Column="0" IsEnabled="{Binding IsEnableHeroDetails}" Content="Изменить процессор" Height="50" Width="180" Command="{Binding OpenInfoWindow}"/>
             </DockPanel>
             <DockPanel>
                 <Button Foreground="AliceBlue" Background="#303030" Style="{StaticResource CustomButton}" BorderBrush="#454545" Grid.Column="0" IsEnabled="{Binding IsEnableDeleteHero}" Content="Удалить" Height="50" Width="180" Command="{Binding DeleteHero}"/>

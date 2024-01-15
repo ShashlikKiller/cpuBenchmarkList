@@ -1,0 +1,98 @@
+﻿<Window x:Class="cpuListApp.View.Windows.CpuInfo"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:cpuListApp.View.Windows" xmlns:viewmodel="clr-namespace:cpuListApp.ViewModel" 
+        xmlns:converter="clr-namespace:cpuListApp.View.Converters" d:DataContext="{d:DesignInstance Type=viewmodel:CpuInfoVM}"
+        mc:Ignorable="d"
+        Title="CpuInfo" Height="464" Width="460">
+    <Window.Resources>
+        <converter:MultiplierConverter x:Key="MultiplierConverter"/>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+        <DockPanel Grid.Column="0" Grid.Row="0">
+            <TextBlock>Name</TextBlock>
+        </DockPanel>
+        <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding CurrentCPU.Name}"></TextBox>
+        <TextBlock Grid.Column="0" Grid.Row="1">Segment</TextBlock>
+        <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding CurrentCPU.Segment}"></TextBox>
+        <TextBlock Grid.Column="0" Grid.Row="2">Socket</TextBlock>
+        <ComboBox Grid.Column="1" Grid.Row="2" ItemsSource="{Binding Sockets}" SelectedItem="{Binding SelectedSocket}">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Name}"/>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+        <TextBlock Grid.Column="0" Grid.Row="3">Max TDP</TextBlock>
+        <DockPanel Grid.Column="1" Grid.Row="3" HorizontalAlignment="Stretch">
+            <TextBox Text="{Binding CurrentCPU.TempLimit, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+            <TextBlock Width="15">W</TextBlock>
+        </DockPanel>
+        <TextBlock Grid.Row="4" Grid.Column="0">Technology</TextBlock>
+        <DockPanel Grid.Row="4" Grid.Column="1">
+            <TextBox Text="{Binding CurrentCPU.Techproccess, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+            <TextBlock Width="19">nm</TextBlock>
+        </DockPanel>
+        <GroupBox Header="Clocks" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="3">
+            <StackPanel>
+                <DockPanel Grid.Row="5" Grid.Column="1">
+                    <TextBlock Grid.Row="5" Grid.Column="0">Core speed</TextBlock>
+                    <TextBox Text="{Binding CurrentCPU.FreqDefault, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                    <TextBlock Width="26">MHz</TextBlock>
+                </DockPanel>
+                <DockPanel Grid.Row="6" Grid.Column="1">
+                    <TextBlock >Turbo speed</TextBlock>
+                    <TextBox Text="{Binding CurrentCPU.FreqTurbo, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                    <TextBlock Width="26">MHz</TextBlock>
+                </DockPanel>
+                <DockPanel>
+                    <TextBlock>Multiplier</TextBlock>
+                    <ComboBox SelectedIndex="{Binding AttackType}">
+                        <ComboBoxItem Content="Yes"/>
+                        <ComboBoxItem Content="No"/>
+                    </ComboBox>
+                </DockPanel>
+            </StackPanel>
+        </GroupBox>
+        <GroupBox Header="Cache" Grid.Row="4" Grid.Column="2" Grid.RowSpan="3" Grid.ColumnSpan="2">
+            <StackPanel>
+                <DockPanel>
+                    <TextBlock>L1 data</TextBlock>
+                    <TextBox Text="{Binding CurrentCPU.L1cache, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                    <TextBlock Width="30">bytes</TextBlock>
+                </DockPanel>
+                <DockPanel>
+                    <TextBlock>L2 data</TextBlock>
+                    <TextBox Text="{Binding CurrentCPU.L2cache, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                    <TextBlock Width="30">bytes</TextBlock>
+                </DockPanel>
+                <DockPanel>
+                    <TextBlock>L3 data</TextBlock>
+                    <TextBox Text="{Binding CurrentCPU.L3cache, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                    <TextBlock Width="30">bytes</TextBlock>
+                </DockPanel>
+            </StackPanel>
+        </GroupBox>
+        <Button Content="Save in db" Command="{Binding SaveChanges}" Grid.Column="2" HorizontalAlignment="Left" Height="35" Margin="70,45,0,0" Grid.Row="8" VerticalAlignment="Top" Grid.RowSpan="2" Grid.ColumnSpan="2" Width="128"/>
+    </Grid>
+</Window>

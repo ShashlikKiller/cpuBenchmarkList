@@ -63,7 +63,7 @@ namespace cpuListApp.Model.Backend.Parser
             return result;
         }
 
-        public static int GetBrandId(string name)
+        private static int GetBrandId(string name)
         {
             switch (name)
             {
@@ -76,7 +76,15 @@ namespace cpuListApp.Model.Backend.Parser
             }
         }
 
-        public static string DeletedTabSpaceStr(string innertext)
+        private static List<CPU> dbCPUs()
+        {
+            using (var db = new cpuListContext())
+            {
+                return db.CPUs.ToList();
+            }
+        }
+
+        private static string DeletedTabSpaceStr(string innertext)
         {
             var input = innertext.Split(new[] { '\t' }, StringSplitOptions.RemoveEmptyEntries);
             return input.Last().Trim();
@@ -110,7 +118,8 @@ namespace cpuListApp.Model.Backend.Parser
             int rank;
             float points;
             // Builder zone
-            List<CPU> cpuList = new List<CPU>();
+            List<CPU> cpuList_parsed = new List<CPU>();
+            List<CPU> cpuList_db = dbCPUs();
             foreach (var row in processorRows.Take(listLength))
             {
                 CPU currCPU = new CPU();
@@ -123,11 +132,20 @@ namespace cpuListApp.Model.Backend.Parser
                     // Открываем дополнительное окошко по ссылке
                     var additionalInfoRows = newDocument.QuerySelectorAll("body div.body div div:nth-child(3) div table tbody tr").Where(x => x.ChildElementCount == 2); // Извлекаем информацию из дополнительного окошка
                     var columns = row.QuerySelectorAll("td");
-                    if (!Int32.TryParse(columns[0].TextContent, out rank)) rank = cpuList.Last().Rank;
+                    if (!Int32.TryParse(columns[0].TextContent, out rank)) rank = cpuList_parsed.Last().Rank;
                     builder.AddRank(rank, currCPU);
                     name = columns[1].TextContent;
                     builder.AddName(name, currCPU);
                     brandId = GetBrandId(name);
+                    if ((cpuList_db.Any(c => c.Name == currCPU.Name)))
+                    {
+                        if ((cpuList_db.Any(c => c.Rank == currCPU.Rank)))
+                        {
+                            continue;
+                            //CurrentCPUlist.Add(cpu);
+                        }
+                    }
+
                     builder.AddBrand(brandId, currCPU);
                     if (!float.TryParse(columns[3].TextContent.Replace('.', ','), out points)) points = 0;
                     builder.AddBenchPoints(points, currCPU);
@@ -242,10 +260,12 @@ namespace cpuListApp.Model.Backend.Parser
                             }
                         }
                     }
-                    cpuList.Add(currCPU);
+                    cpuList_parsed.Add(currCPU);
                 }
             }
-            return cpuList;
+            cpuList_db.AddRange(cpuList_parsed);
+            cpuList_db.OrderBy(cpu => cpu.Rank);
+            return cpuList_db;
         }
     }
 }

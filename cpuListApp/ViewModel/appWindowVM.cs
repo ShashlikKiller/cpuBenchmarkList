@@ -1,5 +1,6 @@
 ﻿using cpuListApp.Model.Backend;
 using cpuListApp.Model.Entities;
+using cpuListApp.View.Windows;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -18,14 +19,14 @@ namespace cpuListApp.ViewModel
 
         public appWindowVM()
         {
-            GridVisibility = "Hidden";
+            CPUListVisibility = "Hidden";
             LoadCPUlistFromDB();
-            if (CurrentCPUlist.Count > 0) GridVisibility = "Visible";
-            DataGridItem = new CPU();
-            IsEnableHeroDetails = false;
-            IsEnableDeleteHero = false;
-            IsEnableParsing = true;
-            ProgressBarVisibility = "Hidden";
+            if (CurrentCPUlist.Count > 0) CPUListVisibility = "Visible";
+            SelectedCPU = new CPU();
+            OpenInfoWindowState = false;
+            DeleteSelectedCPUState = false;
+            ParsingState = true;
+            LoadingFrameVisibility = "Hidden";
             //ShablonPath = @"C:\Users\artem\Desktop\Архитектура ИС\privetVsem.doc";
             //SaveAsPath = @"C:\Users\artem\Desktop\Архитектура ИС\8И11 Принцев АИС Разработка БД и механизмов наполненияdocx.docx";
         }
@@ -38,16 +39,16 @@ namespace cpuListApp.ViewModel
             }
         }
 
-        private string progressBarVisibility;
-        public string ProgressBarVisibility
+        private string loadingFrameVisibility;
+        public string LoadingFrameVisibility
         {
             get
             {
-                return progressBarVisibility;
+                return loadingFrameVisibility;
             }
             set
             {
-                progressBarVisibility = value;
+                loadingFrameVisibility = value;
                 OnPropertyChanged();
             }
         }
@@ -65,89 +66,89 @@ namespace cpuListApp.ViewModel
             }
         }
 
-        private int dataGridIndex;
-        public int DataGridIndex
+        private int selectedCPUindex;
+        public int SelectedCPUindex
         {
             get
             {
-                return dataGridIndex;
+                return selectedCPUindex;
             }
             set
             {
-                dataGridIndex = value;
+                selectedCPUindex = value;
                 OnPropertyChanged();
             }
         }
 
-        private CPU dataGridItem;
-        public CPU DataGridItem
+        private CPU selectedCPU;
+        public CPU SelectedCPU
         {
             get
             {
-                return dataGridItem;
+                return selectedCPU;
             }
             set
             {
-                dataGridItem = value;
+                selectedCPU = value;
                 OnPropertyChanged();
-                if (dataGridItem != null)
+                if (selectedCPU != null)
                 {
-                    IsEnableDeleteHero = true;
-                    IsEnableHeroDetails = true;
+                    DeleteSelectedCPUState = true;
+                    OpenInfoWindowState = true;
                 }
                 else
                 {
-                    IsEnableDeleteHero = false;
-                    IsEnableHeroDetails = false;
+                    DeleteSelectedCPUState = false;
+                    OpenInfoWindowState = false;
                 }
             }
         }
 
         private bool isEnableDeleteHero;
-        public bool IsEnableDeleteHero
+        public bool DeleteSelectedCPUState
         {
             get
             {
-                return isEnableHeroDetails;
+                return openInfoWindowState;
             }
             set
             {
-                isEnableHeroDetails = value;
+                openInfoWindowState = value;
                 OnPropertyChanged();
             }
         }
 
-        private bool isEnableParsing;
-        public bool IsEnableParsing
+        private bool parsingState;
+        public bool ParsingState
         {
             get
             {
-                return isEnableParsing;
+                return parsingState;
             }
             set
             {
-                isEnableParsing = value; OnPropertyChanged();
+                parsingState = value; OnPropertyChanged();
             }
         }
 
-        private bool isEnableHeroDetails;
-        public bool IsEnableHeroDetails
+        private bool openInfoWindowState;
+        public bool OpenInfoWindowState
         {
             get
             {
-                return isEnableHeroDetails;
+                return openInfoWindowState;
             }
             set
             {
-                isEnableHeroDetails = value;
+                openInfoWindowState = value;
                 OnPropertyChanged();
             }
         }
-        private string gridVisibility;
-        public string GridVisibility
+        private string cpuListVisibility;
+        public string CPUListVisibility
         {
-            get { return gridVisibility; }
-            set { gridVisibility = value; OnPropertyChanged(); }
+            get { return cpuListVisibility; }
+            set { cpuListVisibility = value; OnPropertyChanged(); }
         }
         private Command startParsing;
         public Command StartParsing
@@ -156,27 +157,13 @@ namespace cpuListApp.ViewModel
             {
                 return startParsing = new Command(async obj =>
                 {
-                    GridVisibility = "Hidden";
-                    ProgressBarVisibility = "True";
-                    IsEnableParsing = false;
-                    List<CPU> parsedCPUlist = await Parse(25);
-                    using (var db = new cpuListContext())
-                    {
-                        foreach (var cpu in parsedCPUlist)
-                        {
-
-                            if (!(db.CPUs.Any(c => c.Name == cpu.Name)))
-                            {
-                                if (!(db.CPUs.Any(c => c.Rank == cpu.Rank)))
-                                {
-                                    CurrentCPUlist.Add(cpu);
-                                }
-                            }
-                        }
-                    }
-                    IsEnableParsing = true;
-                    ProgressBarVisibility = "False";
-                    GridVisibility = "Visible";
+                    CPUListVisibility = "Hidden";
+                    LoadingFrameVisibility = "True";
+                    ParsingState = false;
+                    CurrentCPUlist = new ObservableCollection<CPU>(await Parse(20));
+                    ParsingState = true;
+                    LoadingFrameVisibility = "False";
+                    CPUListVisibility = "Visible";
                 });
             }
         }
@@ -192,6 +179,7 @@ namespace cpuListApp.ViewModel
                         db.CPUs.RemoveRange(db.CPUs);
                         CurrentCPUlist.Clear();
                         await db.SaveChangesAsync();
+                        CPUListVisibility = "Hidden";
                     }
                 });
             }
@@ -203,12 +191,25 @@ namespace cpuListApp.ViewModel
             {
                 return saveCPUlist = new Command(async obj =>
                 {
-                    trySaveCPUsToDB(CurrentCPUlist);
+                    bool? result = await trySaveCPUsToDB(CurrentCPUlist);
+                });
+            }
+        }
+        private Command openInfoWindow;
+        public Command OpenInfoWindow
+        {
+            get
+            {
+                return openInfoWindow = new Command(async obj =>
+                {
+                    CpuInfo informationWindow = new CpuInfo();
+                    informationWindow.DataContext = new CpuInfoVM(SelectedCPU);
+                    informationWindow.Show();
                 });
             }
         }
 
-        private bool trySaveCPUsToDB(ObservableCollection<CPU> CPUsToSave)
+        private async Task<bool?> trySaveCPUsToDB(ObservableCollection<CPU> CPUsToSave)
         {
             try
             {
@@ -220,10 +221,10 @@ namespace cpuListApp.ViewModel
                         {
                             db.CPUs.RemoveRange(db.CPUs);
                         }
-                        else return false;
+                        else return null;
                     }
                     db.CPUs.AddRange(CPUsToSave);
-                    db.SaveChanges();
+                    await db.SaveChangesAsync();
                 }
             }
             catch

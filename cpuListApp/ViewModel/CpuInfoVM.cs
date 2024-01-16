@@ -12,6 +12,20 @@ namespace cpuListApp.ViewModel
     {
         private CPU currentCPU;
 
+        private int brandImageId;
+        public int BrandImageId
+        {
+            get
+            {
+                return brandImageId;
+            }
+            set
+            {
+                brandImageId = value;
+                OnPropertyChanged();
+            }
+        }
+
         public CPU CurrentCPU
         {
             get
@@ -92,6 +106,7 @@ namespace cpuListApp.ViewModel
         {
             CurrentCPU = selectedCPU;
             Multiplier = Convert.ToInt32(CurrentCPU.Multiplier);
+            BrandImageId = CurrentCPU.BrandId;
             GetSockets();
             GetBrands();
             SelectedSocket = Sockets.Where(c => c.Id == CurrentCPU.SocketId).FirstOrDefault();

@@ -11,7 +11,7 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="900"
         ResizeMode="NoResize"
-        Background="#263238">
+        Background="AliceBlue">
     <Window.Resources>
         <convertor:BrandImageConverter x:Key="BrandImageConverter"/>
         <Style x:Key="ListViewItemBorderStyle" TargetType="ListViewItem">

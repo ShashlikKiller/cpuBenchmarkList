@@ -121,10 +121,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Reports\ReportGenerator.cs" />
     <Compile Include="ViewModel\CpuInfoVM.cs" />
     <Compile Include="View\Converters\MultiplierConverter.cs" />
     <Compile Include="View\Windows\CpuInfo.xaml.cs">
       <DependentUpon>CpuInfo.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Windows\Settings.xaml.cs">
+      <DependentUpon>Settings.xaml</DependentUpon>
     </Compile>
     <Page Include="View\Frames\CPUListFrame.xaml">
       <SubType>Designer</SubType>
@@ -185,6 +189,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\Windows\Settings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Model\Backend\Patterns\CPUBuilder.cs" />
@@ -222,9 +230,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Reports\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Resource Include="View\Images\Sources\unknown.png" />
   </ItemGroup>

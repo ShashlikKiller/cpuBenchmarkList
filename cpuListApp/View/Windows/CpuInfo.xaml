@@ -67,9 +67,9 @@
                 </DockPanel>
                 <DockPanel>
                     <TextBlock>Multiplier</TextBlock>
-                    <ComboBox SelectedIndex="{Binding AttackType}">
-                        <ComboBoxItem Content="Yes"/>
+                    <ComboBox SelectedIndex="{Binding Multiplier}">
                         <ComboBoxItem Content="No"/>
+                        <ComboBoxItem Content="Yes"/>
                     </ComboBox>
                 </DockPanel>
             </StackPanel>

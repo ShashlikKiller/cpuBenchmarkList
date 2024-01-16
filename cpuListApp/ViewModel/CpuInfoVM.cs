@@ -91,6 +91,7 @@ namespace cpuListApp.ViewModel
         public CpuInfoVM(CPU selectedCPU)
         {
             CurrentCPU = selectedCPU;
+            Multiplier = Convert.ToInt32(CurrentCPU.Multiplier);
             GetSockets();
             GetBrands();
             SelectedSocket = Sockets.Where(c => c.Id == CurrentCPU.SocketId).FirstOrDefault();

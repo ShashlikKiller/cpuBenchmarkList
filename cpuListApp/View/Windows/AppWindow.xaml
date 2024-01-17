@@ -121,7 +121,7 @@
                 <Button Foreground="AliceBlue" Background="#303030"  BorderBrush="#454545" Grid.Column="0" IsEnabled="{Binding OpenInfoWindowState}" Content="Изменить процессор" Command="{Binding OpenInfoWindow}"/>
             </DockPanel>
             <DockPanel Width="Auto" Height="50">
-                <Button Foreground="AliceBlue" Background="#303030" BorderBrush="#454545" Grid.Column="0" IsEnabled="{Binding IsEnableDeleteHero}" Content="Удалить" Command="{Binding DeleteHero}"/>
+                <Button Foreground="AliceBlue" Background="#303030" BorderBrush="#454545" Grid.Column="0" IsEnabled="{Binding OpenInfoWindowState}" Content="Удалить" Command="{Binding DeleteCPU}"/>
             </DockPanel>
             <DockPanel Width="Auto" Height="50">
                 <Button Foreground="AliceBlue" Background="#303030" BorderBrush="#454545" Grid.Column="0" Content="Удалить все данные из БД" Command="{Binding DeleteData}"/>

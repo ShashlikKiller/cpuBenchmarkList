@@ -24,7 +24,6 @@ namespace cpuListApp.ViewModel
             if (CurrentCPUlist.Count > 0) CPUListVisibility = "Visible"; else CPUListVisibility = "Hidden";
             SelectedCPU = new CPU();
             OpenInfoWindowState = false;
-            DeleteSelectedCPUState = false;
             ParsingState = true;
             LoadingFrameVisibility = "Hidden";
         }
@@ -91,28 +90,12 @@ namespace cpuListApp.ViewModel
                 OnPropertyChanged();
                 if (selectedCPU != null && selectedCPU.Rank != 0)
                 {
-                    DeleteSelectedCPUState = true;
                     OpenInfoWindowState = true;
                 }
                 else
                 {
-                    DeleteSelectedCPUState = false;
                     OpenInfoWindowState = false;
                 }
-            }
-        }
-
-        private bool isEnableDeleteHero;
-        public bool DeleteSelectedCPUState
-        {
-            get
-            {
-                return openInfoWindowState;
-            }
-            set
-            {
-                openInfoWindowState = value;
-                OnPropertyChanged();
             }
         }
 
@@ -232,22 +215,45 @@ namespace cpuListApp.ViewModel
             }
         }
 
+        private Command deleteCPU;
+        public Command DeleteCPU
+        {
+            get
+            {
+                return deleteCPU ??= new Command(async obj =>
+                {
+                    using (var db = new cpuListContext())
+                    {
+                        if (db.CPUs.Any(x => x.Rank == SelectedCPU.Rank))
+                        {
+                            CPU cputodelete = db.CPUs.Where(x => x.Rank == selectedCPU.Rank).FirstOrDefault();
+                            db.Entry(cputodelete).State = System.Data.Entity.EntityState.Deleted;
+                            await db.SaveChangesAsync();
+                        }
+                    }
+                    CurrentCPUlist.Remove(SelectedCPU);
+                });
+            }
+        }
+
         private async Task<bool?> trySaveCPUsToDB(ObservableCollection<CPU> CPUsToSave)
         {
             try
             {
                 using (var db = new cpuListContext())
                 {
-                    foreach (var cpu in db.CPUs)
+                    if (db.CPUs.Except(CPUsToSave).Any())
                     {
-                        if (CPUsToSave.Any(c => c.Rank == cpu.Rank && c.Name == cpu.Name))
+                        foreach (var cpu in CPUsToSave)
                         {
-                            db.CPUs.RemoveRange(db.CPUs);
+                            if (db.CPUs.Any(x => x.Name == cpu.Name && x.Rank == cpu.Rank))
+                            {
+                                if (db.CPUs.Where(x => x.Name == cpu.Name && x.Rank == cpu.Rank).FirstOrDefault() != cpu) db.Entry(cpu).State = System.Data.Entity.EntityState.Modified;
+                            }
+                            else db.Entry(cpu).State = System.Data.Entity.EntityState.Added;
                         }
-                        else return null;
+                        await db.SaveChangesAsync();
                     }
-                    db.CPUs.AddRange(CPUsToSave);
-                    await db.SaveChangesAsync();
                 }
             }
             catch

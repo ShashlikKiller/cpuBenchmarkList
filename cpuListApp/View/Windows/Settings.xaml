@@ -8,11 +8,11 @@
         Title="Settings" Height="200" Width="400">
     <Grid>
         <StackPanel>
-            <Label Content="Word шаблон (Путь)"/>
+            <Label Content="Shablon path"/>
             <TextBox Height="20" Width="350" Text="{Binding ShablonPath}"/>
-            <Label Content="Сгенерированный отчёт (Путь)"/>
+            <Label Content="Final report path"/>
             <TextBox Height="20" Width="350" Text="{Binding SavePath}"/>
-            <Button Content="Применить" Height="50" Width="150" Margin="0,30,0,0" Command="{Binding ApplyPath}"/>
+            <Button Content="Apply" Height="50" Width="150" Margin="0,30,0,0" Command="{Binding ApplyPath}"/>
         </StackPanel>
     </Grid>
 </Window>

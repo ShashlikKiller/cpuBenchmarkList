@@ -118,19 +118,19 @@
                 <Button Foreground="AliceBlue" Background="#333333" BorderBrush="#454545" Grid.Column="0" Content="Save data in db" Command="{Binding SaveCPUlist}"/>
             </DockPanel>
             <DockPanel Width="Auto" Height="50">
-                <Button Foreground="AliceBlue" Background="#303030"  BorderBrush="#454545" Grid.Column="0" IsEnabled="{Binding OpenInfoWindowState}" Content="Изменить процессор" Command="{Binding OpenInfoWindow}"/>
+                <Button Foreground="AliceBlue" Background="#303030"  BorderBrush="#454545" Grid.Column="0" IsEnabled="{Binding OpenInfoWindowState}" Content="Edit CPU data" Command="{Binding OpenInfoWindow}"/>
             </DockPanel>
             <DockPanel Width="Auto" Height="50">
-                <Button Foreground="AliceBlue" Background="#303030" BorderBrush="#454545" Grid.Column="0" IsEnabled="{Binding OpenInfoWindowState}" Content="Удалить" Command="{Binding DeleteCPU}"/>
+                <Button Foreground="AliceBlue" Background="#303030" BorderBrush="#454545" Grid.Column="0" IsEnabled="{Binding OpenInfoWindowState}" Content="Delete" Command="{Binding DeleteCPU}"/>
             </DockPanel>
             <DockPanel Width="Auto" Height="50">
-                <Button Foreground="AliceBlue" Background="#303030" BorderBrush="#454545" Grid.Column="0" Content="Удалить все данные из БД" Command="{Binding DeleteData}"/>
+                <Button Foreground="AliceBlue" Background="#303030" BorderBrush="#454545" Grid.Column="0" Content="Delete all db rows" Command="{Binding DeleteData}"/>
             </DockPanel>
             <DockPanel Width="Auto" Height="50">
-                <Button Foreground="AliceBlue" Background="#333333" BorderBrush="#454545" Content="Сгенерировать отчёт" Command="{Binding GenerateReport}"/>
+                <Button Foreground="AliceBlue" Background="#333333" BorderBrush="#454545" Content="Generate report" Command="{Binding GenerateReport}"/>
             </DockPanel>
             <DockPanel Width="Auto" Height="50">
-                <Button Foreground="AliceBlue" Background="#333333" BorderBrush="#454545" Content="info" Command="{Binding OpenSettingsWindow}"/>
+                <Button Foreground="AliceBlue" Background="#333333" BorderBrush="#454545" Content="Settings" Command="{Binding OpenSettingsWindow}"/>
             </DockPanel>
         </StackPanel>
     </Grid>

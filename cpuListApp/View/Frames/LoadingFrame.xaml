@@ -11,7 +11,7 @@
     <Grid>
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
             <DockPanel>
-                <TextBlock Foreground="AliceBlue" FontFamily="Cascadia Code" FontSize="25"> Waiting for data...</TextBlock>
+                <TextBlock Foreground="#303030" FontFamily="Cascadia Code" FontSize="25"> Waiting for data...</TextBlock>
             </DockPanel>
             <DockPanel Margin="0,20,9,0">
                 <ProgressBar Height="20" Width="275" IsIndeterminate="True"/>

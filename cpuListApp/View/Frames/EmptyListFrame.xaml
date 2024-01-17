@@ -11,10 +11,10 @@
     <Grid>
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
             <DockPanel HorizontalAlignment="Center">
-                <TextBlock Foreground="AliceBlue" FontFamily="Cascadia Code" FontSize="25"> CPU list is empty!</TextBlock>
+                <TextBlock Foreground="#303030" FontFamily="Cascadia Code" FontSize="25"> CPU list is empty!</TextBlock>
             </DockPanel>
             <DockPanel Margin="0,20,0,0">
-                <TextBlock Foreground="AliceBlue" FontFamily="Cascadia Code" FontSize="18"> Please, load data from parse or database.</TextBlock>
+                <TextBlock Foreground="#303030" FontFamily="Cascadia Code" FontSize="18"> Please, load data from parse or database.</TextBlock>
             </DockPanel>
         </StackPanel>
     </Grid>

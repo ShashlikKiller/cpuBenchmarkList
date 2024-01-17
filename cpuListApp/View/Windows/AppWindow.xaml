@@ -112,25 +112,25 @@
 
         <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Vertical" Margin="10,10,10,10">
             <DockPanel Width="Auto" Height="50">
-                <Button Foreground="#333333" Background="#333333" Style="{StaticResource CustomButton}" BorderBrush="#454545" Grid.Column="0" Content="Start parse" Command="{Binding StartParsing}" IsEnabled="{Binding ParsingState}"/>
+                <Button Foreground="AliceBlue" Background="#333333" BorderBrush="#454545" Grid.Column="0" Content="Start parse" Command="{Binding StartParsing}" IsEnabled="{Binding ParsingState}"/>
             </DockPanel>
             <DockPanel Width="Auto" Height="50">
-                <Button Foreground="AliceBlue" Background="#B0BEC5" Style="{StaticResource CustomButton}" BorderBrush="#454545" Grid.Column="0" Content="Save data in db" Command="{Binding SaveCPUlist}"/>
+                <Button Foreground="AliceBlue" Background="#333333" BorderBrush="#454545" Grid.Column="0" Content="Save data in db" Command="{Binding SaveCPUlist}"/>
             </DockPanel>
-            <DockPanel>
-                <Button Foreground="AliceBlue" Background="#303030" Style="{StaticResource CustomButton}" BorderBrush="#454545" Grid.Column="0" IsEnabled="{Binding IsEnableHeroDetails}" Content="Изменить процессор" Height="50" Width="180" Command="{Binding OpenInfoWindow}"/>
+            <DockPanel Width="Auto" Height="50">
+                <Button Foreground="AliceBlue" Background="#303030"  BorderBrush="#454545" Grid.Column="0" IsEnabled="{Binding OpenInfoWindowState}" Content="Изменить процессор" Command="{Binding OpenInfoWindow}"/>
             </DockPanel>
-            <DockPanel>
-                <Button Foreground="AliceBlue" Background="#303030" Style="{StaticResource CustomButton}" BorderBrush="#454545" Grid.Column="0" IsEnabled="{Binding IsEnableDeleteHero}" Content="Удалить" Height="50" Width="180" Command="{Binding DeleteHero}"/>
+            <DockPanel Width="Auto" Height="50">
+                <Button Foreground="AliceBlue" Background="#303030" BorderBrush="#454545" Grid.Column="0" IsEnabled="{Binding IsEnableDeleteHero}" Content="Удалить" Command="{Binding DeleteHero}"/>
             </DockPanel>
-            <DockPanel>
-                <Button Foreground="AliceBlue" Background="#303030" Style="{StaticResource CustomButton}" BorderBrush="#454545" Grid.Column="0" Content="Удалить все данные из БД" Height="50" Width="180" Command="{Binding DeleteData}"/>
+            <DockPanel Width="Auto" Height="50">
+                <Button Foreground="AliceBlue" Background="#303030" BorderBrush="#454545" Grid.Column="0" Content="Удалить все данные из БД" Command="{Binding DeleteData}"/>
             </DockPanel>
-            <DockPanel>
-                <Button Content="Сгенерировать отчёт" Height="50" Width="180" Command="{Binding GenerateReport}"/>
+            <DockPanel Width="Auto" Height="50">
+                <Button Foreground="AliceBlue" Background="#333333" BorderBrush="#454545" Content="Сгенерировать отчёт" Command="{Binding GenerateReport}"/>
             </DockPanel>
-            <DockPanel>
-                <Button Content="info" Height="50" Width="50" Command="{Binding InfoWindow}"/>
+            <DockPanel Width="Auto" Height="50">
+                <Button Foreground="AliceBlue" Background="#333333" BorderBrush="#454545" Content="info" Command="{Binding OpenSettingsWindow}"/>
             </DockPanel>
         </StackPanel>
     </Grid>

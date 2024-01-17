@@ -1,5 +1,6 @@
 ﻿using cpuListApp.Model.Backend;
 using cpuListApp.Model.Entities;
+using cpuListApp.Reports;
 using cpuListApp.View.Windows;
 using System;
 using System.Collections.Generic;
@@ -19,16 +20,13 @@ namespace cpuListApp.ViewModel
 
         public appWindowVM()
         {
-            CPUListVisibility = "Hidden";
             LoadCPUlistFromDB();
-            if (CurrentCPUlist.Count > 0) CPUListVisibility = "Visible";
+            if (CurrentCPUlist.Count > 0) CPUListVisibility = "Visible"; else CPUListVisibility = "Hidden";
             SelectedCPU = new CPU();
             OpenInfoWindowState = false;
             DeleteSelectedCPUState = false;
             ParsingState = true;
             LoadingFrameVisibility = "Hidden";
-            //ShablonPath = @"C:\Users\artem\Desktop\Архитектура ИС\privetVsem.doc";
-            //SaveAsPath = @"C:\Users\artem\Desktop\Архитектура ИС\8И11 Принцев АИС Разработка БД и механизмов наполненияdocx.docx";
         }
 
         private void LoadCPUlistFromDB()
@@ -91,7 +89,7 @@ namespace cpuListApp.ViewModel
             {
                 selectedCPU = value;
                 OnPropertyChanged();
-                if (selectedCPU != null)
+                if (selectedCPU != null && selectedCPU.Rank != 0)
                 {
                     DeleteSelectedCPUState = true;
                     OpenInfoWindowState = true;
@@ -205,6 +203,31 @@ namespace cpuListApp.ViewModel
                     CpuInfo informationWindow = new CpuInfo();
                     informationWindow.DataContext = new CpuInfoVM(SelectedCPU);
                     informationWindow.Show();
+                });
+            }
+        }
+        private Command openSettingsWindow;
+        public Command OpenSettingsWindow
+        {
+            get
+            {
+                return openSettingsWindow = new Command(async obj =>
+                {
+                    Settings settingsWindow = new Settings();
+                    settingsWindow.DataContext = new basicVM();
+                    settingsWindow.Show();
+                });
+            }
+        }
+
+        private Command generateReport;
+        public Command GenerateReport
+        {
+            get
+            {
+                return generateReport ??= new Command(obj =>
+                {
+                    ReportGenerator.GetInstance().GenerateReport(ShablonPath, SavePath);
                 });
             }
         }

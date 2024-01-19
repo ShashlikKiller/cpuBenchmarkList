@@ -97,8 +97,11 @@ namespace cpuListApp.ViewModel
             {
                 CurrentCPU.Multiplier = multiplier;
                 CurrentCPU.SocketId = SelectedSocket.Id;
-                db.Entry(currentCPU).State = System.Data.Entity.EntityState.Modified;
-                await db.SaveChangesAsync();
+                if (db.CPUs.Any(x=>x.Id == CurrentCPU.Id))
+                {
+                    db.Entry(CurrentCPU).State = System.Data.Entity.EntityState.Modified;
+                    await db.SaveChangesAsync();
+                }
             }
         }
 

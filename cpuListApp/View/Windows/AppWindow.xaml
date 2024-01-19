@@ -9,7 +9,7 @@
         xmlns:pointstowidth="clr-namespace:cpuListApp.View.Converters"
         d:DataContext="{d:DesignInstance Type=viewmodel:appWindowVM}"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="900"
+        Title="MainWindow" Height="500" Width="900"
         ResizeMode="NoResize"
         Background="AliceBlue">
     <Window.Resources>
@@ -113,6 +113,7 @@
         <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Vertical" Margin="10,10,10,10">
             <DockPanel Width="Auto" Height="50">
                 <Button Foreground="AliceBlue" Background="#333333" BorderBrush="#454545" Grid.Column="0" Content="Start parse" Command="{Binding StartParsing}" IsEnabled="{Binding ParsingState}"/>
+                <TextBox Text="{Binding CPUsParseListLength}" IsEnabled="{Binding ParsingState}"></TextBox>
             </DockPanel>
             <DockPanel Width="Auto" Height="50">
                 <Button Foreground="AliceBlue" Background="#333333" BorderBrush="#454545" Grid.Column="0" Content="Save data in db" Command="{Binding SaveCPUlist}"/>
@@ -127,7 +128,7 @@
                 <Button Foreground="AliceBlue" Background="#303030" BorderBrush="#454545" Grid.Column="0" Content="Delete all db rows" Command="{Binding DeleteData}"/>
             </DockPanel>
             <DockPanel Width="Auto" Height="50">
-                <Button Foreground="AliceBlue" Background="#333333" BorderBrush="#454545" Content="Generate report" Command="{Binding GenerateReport}"/>
+                <Button Foreground="AliceBlue" Background="#333333" BorderBrush="#454545" Content="Generate report" IsEnabled="{Binding ParsingState}" Command="{Binding GenerateReport}"/>
             </DockPanel>
             <DockPanel Width="Auto" Height="50">
                 <Button Foreground="AliceBlue" Background="#333333" BorderBrush="#454545" Content="Settings" Command="{Binding OpenSettingsWindow}"/>

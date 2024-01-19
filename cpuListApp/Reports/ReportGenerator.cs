@@ -17,7 +17,7 @@ namespace cpuListApp.Reports
         private static ReportGenerator instance;
         public static ReportGenerator GetInstance()
         {
-            instance = new ReportGenerator();
+            if (instance == null) instance = new ReportGenerator();
             return instance;
         }
 
@@ -28,7 +28,7 @@ namespace cpuListApp.Reports
             Excel.Workbook workbook = excelApp.Workbooks.Add();
             Excel.Worksheet worksheet = workbook.Sheets.Add();
 
-            //массивы параметров героев
+            //массивы параметров
             CPU[] CPUs = GetCPUs();
 
             if (CPUs == null)
@@ -49,10 +49,13 @@ namespace cpuListApp.Reports
             CreateChart(worksheet, cpuNames, cpuClockspeed, "Скорость ядра (базовая)", Excel.XlChartType.xlBarClustered, 4);
             CreateChart(worksheet, cpuNames, cpuCores, "Кол-во ядер", Excel.XlChartType.xlLineMarkers, 5);
             string excelFilePath = @"graphics.xlsx";
-            workbook.SaveAs(excelFilePath);
-            workbook.Close();
-            excelApp.Quit();
-
+            try
+            {
+                workbook.SaveAs(excelFilePath);
+                workbook.Close();
+                excelApp.Quit();
+            }
+            catch (Exception e) { }
             //открываем word
             Microsoft.Office.Interop.Word.Application wordApp = new();
 
@@ -104,7 +107,6 @@ namespace cpuListApp.Reports
             switch (switcher)
             {
                 case 1:
-                    range = worksheet.Range[$"A1:B{xValues.Length}"];
                     break;
                 case 2:
                     range = worksheet.Range[$"C1:D{xValues.Length}"];

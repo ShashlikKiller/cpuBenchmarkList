@@ -9,7 +9,7 @@ using static cpuListApp.Model.Backend.Patterns.CPUBuilder;
 
 namespace cpuListApp.Model.Backend.Parser
 {
-    public class Parser
+    public static class Parser
     {
         private static int ExtractMhzValue(string freq)
         {
@@ -22,7 +22,7 @@ namespace cpuListApp.Model.Backend.Parser
                 }
             }
             return 0;
-            throw new ArgumentException("Invalid frequency input format");
+            //throw new ArgumentException("Invalid frequency input format");
         }
 
         private static float ExtractTDP(string tdp)

@@ -141,7 +141,7 @@ namespace cpuListApp.ViewModel
                     CPUListVisibility = "Hidden";
                     LoadingFrameVisibility = "True";
                     ParsingState = false;
-                    CurrentCPUlist = new ObservableCollection<CPU>(await Parse(20));
+                    CurrentCPUlist = new ObservableCollection<CPU>(await Parse(CPUsParseListLength));
                     ParsingState = true;
                     LoadingFrameVisibility = "False";
                     CPUListVisibility = "Visible";
@@ -215,6 +215,19 @@ namespace cpuListApp.ViewModel
             }
         }
 
+        private int cpusParseListLength = 120;
+        public int CPUsParseListLength
+        {
+            get { return cpusParseListLength; }
+            set 
+            {
+                if (value < 1) value = 1;
+                if (value > 3741) value = 3740;
+                cpusParseListLength = value;
+                OnPropertyChanged(); 
+            }
+        }
+
         private Command deleteCPU;
         public Command DeleteCPU
         {
@@ -242,8 +255,6 @@ namespace cpuListApp.ViewModel
             {
                 using (var db = new cpuListContext())
                 {
-                    if (db.CPUs.Except(CPUsToSave).Any())
-                    {
                         foreach (var cpu in CPUsToSave)
                         {
                             if (db.CPUs.Any(x => x.Name == cpu.Name && x.Rank == cpu.Rank))
@@ -251,7 +262,6 @@ namespace cpuListApp.ViewModel
                                 if (db.CPUs.Where(x => x.Name == cpu.Name && x.Rank == cpu.Rank).FirstOrDefault() != cpu) db.Entry(cpu).State = System.Data.Entity.EntityState.Modified;
                             }
                             else db.Entry(cpu).State = System.Data.Entity.EntityState.Added;
-                        }
                         await db.SaveChangesAsync();
                     }
                 }
